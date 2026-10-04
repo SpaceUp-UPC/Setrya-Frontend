@@ -1,9 +1,106 @@
 {
-  "users": [],
-  "homes": [],
-  "devices": [],
-  "temperatureReadings": [],
-  "powerReadings": [],
-  "securityEvents": [],
-  "alerts": []
+  "devices": [
+    {
+      "id": 1,
+      "homeId": 1,
+      "name": "Kitchen Temperature Sensor",
+      "type": "TEMPERATURE_SENSOR",
+      "location": "Kitchen",
+      "status": "NORMAL"
+    },
+    {
+      "id": 2,
+      "homeId": 1,
+      "name": "Main Entrance Security",
+      "type": "SECURITY_SENSOR",
+      "location": "Main Entrance",
+      "status": "WARNING"
+    },
+    {
+      "id": 3,
+      "homeId": 1,
+      "name": "Electrical Protector",
+      "type": "ELECTRICAL_PROTECTOR",
+      "location": "Electrical Panel",
+      "status": "NORMAL"
+    }
+  ],
+
+  "temperatureReadings": [
+    {
+      "id": 1,
+      "deviceId": 1,
+      "temperature": 26,
+      "threshold1": 40,
+      "threshold2": 55,
+      "status": "NORMAL",
+      "recordedAt": "2026-10-04T10:00:00"
+    }
+  ],
+
+  "powerReadings": [
+    {
+      "id": 1,
+      "deviceId": 3,
+      "voltage": 220,
+      "current": 3.6,
+      "power": 792,
+      "accumulatedConsumption": 14.7,
+      "relayEnabled": true,
+      "status": "NORMAL",
+      "recordedAt": "2026-10-04T10:00:00"
+    }
+  ],
+
+  "securityEvents": [
+    {
+      "id": 1,
+      "deviceId": 2,
+      "personDetected": true,
+      "personRecognized": true,
+      "suspiciousSound": true,
+      "status": "SUSPICIOUS_EVENT",
+      "location": "Main Entrance",
+      "recordedAt": "2026-10-04T09:42:00"
+    }
+  ],
+
+  "alerts": [
+    {
+      "id": 1,
+      "homeId": 1,
+      "source": "SECURITY",
+      "severity": "CRITICAL",
+      "title": "Suspicious security event",
+      "description": "Unknown person and suspicious sound detected.",
+      "createdAt": "2026-10-04T09:42:00",
+      "acknowledged": false
+    }
+  ],
+
+  "homes": [
+    {
+      "id": 1,
+      "ownerId": 1,
+      "name": "Main Home",
+      "location": "Lima"
+    }
+  ],
+
+  "users": [
+    {
+      "id": 1,
+      "name": "Alex Johnson",
+      "email": "owner@setrya.com",
+      "password": "password123",
+      "role": "HOME_OWNER"
+    },
+    {
+      "id": 2,
+      "name": "Taylor Smith",
+      "email": "installer@setrya.com",
+      "password": "password123",
+      "role": "IMPLEMENTER"
+    }
+  ]
 }

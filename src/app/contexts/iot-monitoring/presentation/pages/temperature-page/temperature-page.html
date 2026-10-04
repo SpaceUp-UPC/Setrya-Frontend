@@ -1,0 +1,65 @@
+<section class="temperature-page">
+
+  <header>
+    <h1>Temperature Monitoring</h1>
+    <p>Current temperature and thermal monitoring status.</p>
+  </header>
+
+  @if (readings$ | async; as readings) {
+
+    @if (readings.length > 0) {
+
+      <div class="readings">
+
+        @for (reading of readings; track reading.id) {
+
+          <article class="reading-card">
+
+            <div class="reading-header">
+              <h2>{{ reading.temperature }} °C</h2>
+
+              <span>
+                {{ reading.status }}
+              </span>
+            </div>
+
+            <dl>
+
+              <div>
+                <dt>Warning threshold</dt>
+                <dd>{{ reading.threshold1 }} °C</dd>
+              </div>
+
+              <div>
+                <dt>Critical threshold</dt>
+                <dd>{{ reading.threshold2 }} °C</dd>
+              </div>
+
+              <div>
+                <dt>Recorded at</dt>
+                <dd>
+                  {{ reading.recordedAt | date:'medium' }}
+                </dd>
+              </div>
+
+            </dl>
+
+          </article>
+
+        }
+
+      </div>
+
+    } @else {
+
+      <p>No temperature readings found.</p>
+
+    }
+
+  } @else {
+
+    <p>Loading temperature readings...</p>
+
+  }
+
+</section>
