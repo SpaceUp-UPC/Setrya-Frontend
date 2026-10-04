@@ -1,0 +1,171 @@
+<section class="dashboard-page">
+
+  @if (overview$ | async; as overview) {
+
+    <header>
+      <div>
+        <h1>{{ overview.home.name }}</h1>
+        <p>{{ overview.home.location }}</p>
+      </div>
+    </header>
+
+    <section class="summary-grid">
+
+      <!-- Temperature -->
+
+      <article class="summary-card">
+
+        <span class="card-label">
+          Temperature
+        </span>
+
+        @if (overview.temperature) {
+
+          <h2>
+            {{ overview.temperature.temperature }} °C
+          </h2>
+
+          <span>
+            {{ overview.temperature.status }}
+          </span>
+
+        } @else {
+
+          <p>No data available.</p>
+
+        }
+
+      </article>
+
+
+      <!-- Security -->
+
+      <article class="summary-card">
+
+        <span class="card-label">
+          Security
+        </span>
+
+        @if (overview.security) {
+
+          <h2>
+            {{ overview.security.status }}
+          </h2>
+
+          <span>
+            {{ overview.security.location }}
+          </span>
+
+        } @else {
+
+          <p>No data available.</p>
+
+        }
+
+      </article>
+
+
+      <!-- Power -->
+
+      <article class="summary-card">
+
+        <span class="card-label">
+          Electrical Protection
+        </span>
+
+        @if (overview.power) {
+
+          <h2>
+            {{ overview.power.status }}
+          </h2>
+
+          <span>
+            {{ overview.power.voltage }} V
+          </span>
+
+        } @else {
+
+          <p>No data available.</p>
+
+        }
+
+      </article>
+
+
+      <!-- Alerts -->
+
+      <article class="summary-card">
+
+        <span class="card-label">
+          Alerts
+        </span>
+
+        <h2>
+          {{ overview.alerts.length }}
+        </h2>
+
+        <span>
+          Registered alerts
+        </span>
+
+      </article>
+
+    </section>
+
+
+    <section class="recent-alerts">
+
+      <h2>Recent Alerts</h2>
+
+      @if (overview.alerts.length > 0) {
+
+        @for (
+          alert of overview.alerts;
+          track alert.id
+          ) {
+
+          <article class="alert-item">
+
+            <div>
+
+              <strong>
+                {{ alert.title }}
+              </strong>
+
+              <p>
+                {{ alert.description }}
+              </p>
+
+            </div>
+
+            <div class="alert-meta">
+
+              <span>
+                {{ alert.severity }}
+              </span>
+
+              <time>
+                {{ alert.createdAt | date:'medium' }}
+              </time>
+
+            </div>
+
+          </article>
+
+        }
+
+      } @else {
+
+        <p>No alerts found.</p>
+
+      }
+
+    </section>
+
+  } @else {
+
+    <p>Loading home overview...</p>
+
+  }
+
+</section>

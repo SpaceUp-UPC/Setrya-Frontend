@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:setrya-web-app": "node dist/setrya-web-app/server/server.mjs"
+    "serve:ssr:setrya-web-app": "node dist/setrya-web-app/server/server.mjs",
+    "api": "json-server --watch server/db.json --port 3000"
   },
   "private": true,
   "packageManager": "npm@11.19.1",

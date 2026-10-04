@@ -1,0 +1,43 @@
+.alerts-page {
+  max-width: 1000px;
+}
+
+header {
+  margin-bottom: 2rem;
+}
+
+.alerts {
+  display: grid;
+  gap: 1rem;
+}
+
+.alert-card {
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+
+  h2 {
+    margin: 0.25rem 0 0;
+  }
+}
+
+.alert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.source,
+.severity {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}

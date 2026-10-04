@@ -1,0 +1,78 @@
+<section class="power-page">
+
+  <header>
+    <h1>Electrical Protection</h1>
+    <p>Electrical measurements and protection status.</p>
+  </header>
+
+  @if (readings$ | async; as readings) {
+
+    @if (readings.length > 0) {
+
+      <div class="readings">
+
+        @for (reading of readings; track reading.id) {
+
+          <article class="reading-card">
+
+            <div class="reading-header">
+              <h2>{{ reading.status }}</h2>
+
+              <span>
+                Relay:
+                {{ reading.relayEnabled ? 'Enabled' : 'Disabled' }}
+              </span>
+            </div>
+
+            <dl>
+
+              <div>
+                <dt>Voltage</dt>
+                <dd>{{ reading.voltage }} V</dd>
+              </div>
+
+              <div>
+                <dt>Current</dt>
+                <dd>{{ reading.current }} A</dd>
+              </div>
+
+              <div>
+                <dt>Power</dt>
+                <dd>{{ reading.power }} W</dd>
+              </div>
+
+              <div>
+                <dt>Accumulated consumption</dt>
+                <dd>
+                  {{ reading.accumulatedConsumption }} kWh
+                </dd>
+              </div>
+
+              <div>
+                <dt>Recorded at</dt>
+                <dd>
+                  {{ reading.recordedAt | date:'medium' }}
+                </dd>
+              </div>
+
+            </dl>
+
+          </article>
+
+        }
+
+      </div>
+
+    } @else {
+
+      <p>No electrical readings found.</p>
+
+    }
+
+  } @else {
+
+    <p>Loading electrical data...</p>
+
+  }
+
+</section>

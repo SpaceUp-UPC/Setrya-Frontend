@@ -1,0 +1,35 @@
+.login-page {
+  min-height: 100vh;
+
+  display: grid;
+  place-items: center;
+
+  padding: 1.5rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+mat-card-content {
+  padding-top: 1.5rem;
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+button {
+  min-height: 48px;
+}
+
+.error-message {
+  margin: 0;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,58 @@
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>Setrya</h1>
+    </div>
+
+    <nav aria-label="Main navigation">
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active">
+        Dashboard
+      </a>
+
+      <a
+        routerLink="/monitoring/temperature"
+        routerLinkActive="active">
+        Temperature
+      </a>
+
+      <a
+        routerLink="/monitoring/security"
+        routerLinkActive="active">
+        Security
+      </a>
+
+      <a
+        routerLink="/monitoring/power"
+        routerLinkActive="active">
+        Electrical Protection
+      </a>
+
+      <a
+        routerLink="/alerts"
+        routerLinkActive="active">
+        Alerts
+      </a>
+
+      @if (session.currentUser(); as user) {
+        <p>
+          {{ user.name }}
+        </p>
+      }
+
+      <button
+        type="button"
+        (click)="logout()">
+        Sign out
+      </button>
+
+    </nav>
+  </aside>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+
+</div>
