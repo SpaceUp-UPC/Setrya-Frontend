@@ -1,25 +1,31 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Home } from '../../domain/models/home';
+import { environment } from '../../../../../environments/environment';
+
 import { SpaceManagementRepository } from '../../domain/repositories/space-management.repository';
+import { Home } from '../../domain/models/home';
 
 @Injectable()
 export class HttpSpaceManagementRepository
   extends SpaceManagementRepository {
 
-  private readonly apiUrl = 'http://localhost:3000';
+  private readonly http =
+    inject(HttpClient);
 
-  constructor(
-    private readonly http: HttpClient
-  ) {
-    super();
-  }
+  private readonly apiUrl =
+    environment.apiUrl;
 
-  getHomeById(homeId: number): Observable<Home> {
+
+  getHomeById(
+    homeId: number
+  ): Observable<Home> {
+
     return this.http.get<Home>(
       `${this.apiUrl}/homes/${homeId}`
     );
+
   }
+
 }
