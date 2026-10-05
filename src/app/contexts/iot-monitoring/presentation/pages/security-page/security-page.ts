@@ -1,12 +1,15 @@
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { GetSecurityEventsUseCase } from '../../../application/use-cases/get-security-events.use-case';
 
 @Component({
   selector: 'app-security-page',
   imports: [
-    AsyncPipe
+    AsyncPipe,
+    DatePipe,
+    TranslatePipe
   ],
   templateUrl: './security-page.html',
   styleUrl: './security-page.scss'

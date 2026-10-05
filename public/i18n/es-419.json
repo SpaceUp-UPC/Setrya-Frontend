@@ -1,0 +1,174 @@
+{
+  "common": {
+    "appName": "Setrya",
+    "signOut": "Cerrar sesión",
+    "english": "Inglés",
+    "spanish": "Español",
+    "yes": "Sí",
+    "no": "No",
+    "enabled": "Habilitado",
+    "disabled": "Deshabilitado"
+  },
+
+  "navigation": {
+    "dashboard": "Panel principal",
+    "temperature": "Temperatura",
+    "security": "Seguridad",
+    "power": "Protección eléctrica",
+    "alerts": "Alertas"
+  },
+
+  "accessibility": {
+    "skipToContent": "Saltar al contenido principal",
+    "mainNavigation": "Navegación principal",
+    "languageSelector": "Selector de idioma",
+    "changeToEnglish": "Cambiar idioma a inglés",
+    "changeToSpanish": "Cambiar idioma a español",
+    "alertFilters": "Filtros de alertas"
+  },
+
+  "login": {
+    "title": "Iniciar sesión",
+    "subtitle": "Ingresa tus datos para acceder a tu cuenta.",
+
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+
+    "signIn": "Iniciar sesión",
+    "signingIn": "Iniciando sesión...",
+
+    "emailRequired": "El correo electrónico es obligatorio.",
+    "invalidEmail": "Ingresa un correo electrónico válido.",
+    "passwordRequired": "La contraseña es obligatoria.",
+
+    "invalidCredentials": "Correo electrónico o contraseña incorrectos.",
+    "connectionError": "No se pudo conectar con el servicio de autenticación.",
+
+    "heroTag": "TU HOGAR, SIEMPRE CERCA",
+    "heroTitle": "Tranquilidad y control en un mismo lugar.",
+    "heroDescription": "Accede a Setrya para supervisar tus dispositivos, revisar alertas y cuidar lo que más importa, estés donde estés.",
+    "heroBenefitSecurity": "Acceso protegido",
+    "heroBenefitMonitoring": "Monitoreo continuo",
+    "heroFooter": "Protección conectada"
+  },
+
+  "dashboard": {
+    "title": "Resumen del hogar",
+    "subtitle": "Estado general",
+    "devices": "Dispositivos",
+    "registeredDevices": "Dispositivos registrados",
+    "activeAlertsLabel": "Alertas activas",
+    "activeAlerts": "alertas activas requieren tu atención.",
+    "alertBannerTitle": "Tu hogar requiere atención",
+    "reviewAlerts": "Revisar alertas",
+    "recentAlerts": "Alertas recientes",
+    "registeredAlerts": "Alertas registradas",
+    "devicesByArea": "Dispositivos por ambiente",
+    "quickActions": "Acciones rápidas",
+    "goToAlerts": "Ir al centro de alertas",
+    "device": "Dispositivo",
+    "noDevices": "No hay dispositivos registrados.",
+    "noAlerts": "No se encontraron alertas.",
+    "noData": "No hay datos disponibles.",
+    "loading": "Cargando estado del hogar..."
+  },
+
+  "temperature": {
+    "title": "Monitoreo de temperatura",
+    "subtitle": "Temperatura actual y estado del monitoreo térmico.",
+
+    "deviceDetail": "Sensor térmico",
+    "online": "En línea",
+
+    "current": "Temperatura actual",
+
+    "normal": "Normal",
+    "warningThreshold": "Moderado",
+    "criticalThreshold": "Crítico",
+
+    "history": "Histórico de temperatura",
+    "historySubtitle": "Mediciones recientes del sensor.",
+
+    "recentEvents": "Eventos recientes",
+
+    "deviceInformation": "Información del dispositivo",
+    "deviceId": "ID del dispositivo",
+    "location": "Ambiente",
+    "battery": "Batería",
+    "lastSignal": "Última señal",
+    "statusLabel": "Estado",
+
+    "recordedAt": "Registrado el",
+
+    "noDevice": "No se encontró un sensor térmico.",
+    "noReadings": "No se encontraron lecturas de temperatura.",
+    "loading": "Cargando datos de temperatura..."
+  },
+
+  "security": {
+    "title": "Monitoreo de seguridad",
+    "subtitle": "Eventos de seguridad acústicos y visuales.",
+    "personDetected": "Persona detectada",
+    "personRecognized": "Persona reconocida",
+    "suspiciousSound": "Sonido sospechoso",
+    "recordedAt": "Registrado el",
+    "noEvents": "No se encontraron eventos de seguridad.",
+    "loading": "Cargando eventos de seguridad..."
+  },
+
+  "power": {
+    "title": "Protección eléctrica",
+    "subtitle": "Mediciones eléctricas y estado de protección.",
+    "relay": "Relé",
+    "voltage": "Voltaje",
+    "current": "Corriente",
+    "power": "Potencia",
+    "consumption": "Consumo acumulado",
+    "recordedAt": "Registrado el",
+    "noReadings": "No se encontraron lecturas eléctricas.",
+    "loading": "Cargando datos eléctricos..."
+  },
+
+  "alerts": {
+    "title": "Centro de alertas",
+    "subtitle": "Alertas centralizadas generadas por los dispositivos Setrya.",
+
+    "listTitle": "Alertas",
+    "details": "Detalle de alerta",
+
+    "source": "Origen",
+    "severity": "Severidad",
+    "statusLabel": "Estado",
+    "createdAt": "Fecha de registro",
+
+    "acknowledged": "Reconocida",
+    "pending": "Pendiente",
+
+    "noAlerts": "No hay alertas para este filtro.",
+    "noSelection": "Selecciona una alerta para ver sus detalles.",
+    "loading": "Cargando alertas...",
+
+    "unknownSource": "Origen desconocido",
+
+    "filters": {
+      "all": "Todas",
+      "critical": "Críticas",
+      "security": "Seguridad",
+      "temperature": "Térmicas",
+      "power": "Eléctricas"
+    }
+  },
+
+  "status": {
+    "NORMAL": "Normal",
+    "WARNING": "Advertencia",
+    "CRITICAL": "Crítico",
+    "POWER_CUT": "Corte eléctrico",
+    "MONITORING": "Monitoreando",
+    "PERSON_DETECTED": "Persona detectada",
+    "UNKNOWN_PERSON": "Persona desconocida",
+    "SUSPICIOUS_EVENT": "Evento sospechoso",
+    "VALIDATING": "Validando",
+    "EMERGENCY": "Emergencia"
+  }
+}

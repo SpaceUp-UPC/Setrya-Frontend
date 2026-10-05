@@ -1,12 +1,15 @@
 {
   "devices": [
-    {
-      "id": 1,
-      "homeId": 1,
-      "name": "Kitchen Temperature Sensor",
-      "type": "TEMPERATURE_SENSOR",
-      "location": "Kitchen",
-      "status": "NORMAL"
+      {
+        "id": 1,
+        "homeId": 1,
+        "name": "Kitchen Temperature Sensor",
+        "type": "TEMPERATURE_SENSOR",
+        "location": "Kitchen",
+        "status": "NORMAL",
+        "code": "TMP-001",
+        "batteryLevel": 86,
+        "lastSignalAt": "2026-10-04T19:30:00"
     },
     {
       "id": 2,
@@ -30,11 +33,56 @@
     {
       "id": 1,
       "deviceId": 1,
-      "temperature": 26,
-      "threshold1": 40,
-      "threshold2": 55,
+      "temperature": 22.8,
+      "threshold1": 30,
+      "threshold2": 40,
       "status": "NORMAL",
-      "recordedAt": "2026-10-04T10:00:00"
+      "recordedAt": "2026-10-04T12:00:00"
+    },
+    {
+      "id": 2,
+      "deviceId": 1,
+      "temperature": 23.4,
+      "threshold1": 30,
+      "threshold2": 40,
+      "status": "NORMAL",
+      "recordedAt": "2026-10-04T13:00:00"
+    },
+    {
+      "id": 3,
+      "deviceId": 1,
+      "temperature": 24.1,
+      "threshold1": 30,
+      "threshold2": 40,
+      "status": "NORMAL",
+      "recordedAt": "2026-10-04T14:00:00"
+    },
+    {
+      "id": 4,
+      "deviceId": 1,
+      "temperature": 24.6,
+      "threshold1": 30,
+      "threshold2": 40,
+      "status": "NORMAL",
+      "recordedAt": "2026-10-04T15:00:00"
+    },
+    {
+      "id": 5,
+      "deviceId": 1,
+      "temperature": 25.2,
+      "threshold1": 30,
+      "threshold2": 40,
+      "status": "NORMAL",
+      "recordedAt": "2026-10-04T16:00:00"
+    },
+    {
+      "id": 6,
+      "deviceId": 1,
+      "temperature": 24.9,
+      "threshold1": 30,
+      "threshold2": 40,
+      "status": "NORMAL",
+      "recordedAt": "2026-10-04T17:00:00"
     }
   ],
 
@@ -58,7 +106,7 @@
       "deviceId": 2,
       "personDetected": true,
       "personRecognized": true,
-      "suspiciousSound": true,
+      "suspiciousSound": false,
       "status": "SUSPICIOUS_EVENT",
       "location": "Main Entrance",
       "recordedAt": "2026-10-04T09:42:00"

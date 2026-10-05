@@ -1,8 +1,15 @@
 <section class="security-page">
 
   <header>
-    <h1>Security Monitoring</h1>
-    <p>Acoustic and visual security events.</p>
+
+    <h1>
+      {{ 'security.title' | translate }}
+    </h1>
+
+    <p>
+      {{ 'security.subtitle' | translate }}
+    </p>
+
   </header>
 
   @if (events$ | async; as events) {
@@ -16,41 +23,86 @@
           <article class="event-card">
 
             <div class="event-header">
-              <h2>{{ event.location }}</h2>
+
+              <h2>
+                {{ event.location }}
+              </h2>
 
               <span>
-                {{ event.status }}
+                {{
+                  ('status.' + event.status)
+                    | translate
+                }}
               </span>
+
             </div>
 
             <dl>
 
               <div>
-                <dt>Person detected</dt>
+
+                <dt>
+                  {{ 'security.personDetected' | translate }}
+                </dt>
+
                 <dd>
-                  {{ event.personDetected ? 'Yes' : 'No' }}
+                  {{
+                    (
+                      event.personDetected
+                        ? 'common.yes'
+                        : 'common.no'
+                    ) | translate
+                  }}
                 </dd>
+
               </div>
 
               <div>
-                <dt>Person recognized</dt>
+
+                <dt>
+                  {{ 'security.personRecognized' | translate }}
+                </dt>
+
                 <dd>
-                  {{ event.personRecognized ? 'Yes' : 'No' }}
+                  {{
+                    (
+                      event.personRecognized
+                        ? 'common.yes'
+                        : 'common.no'
+                    ) | translate
+                  }}
                 </dd>
+
               </div>
 
               <div>
-                <dt>Suspicious sound</dt>
+
+                <dt>
+                  {{ 'security.suspiciousSound' | translate }}
+                </dt>
+
                 <dd>
-                  {{ event.suspiciousSound ? 'Yes' : 'No' }}
+                  {{
+                    (
+                      event.suspiciousSound
+                        ? 'common.yes'
+                        : 'common.no'
+                    ) | translate
+                  }}
                 </dd>
+
               </div>
 
               <div>
-                <dt>Recorded at</dt>
+
+                <dt>
+                  {{ 'security.recordedAt' | translate }}
+                </dt>
+
                 <dd>
-                  {{ event.recordedAt }}
+                  {{ event.recordedAt | date:'medium' }}
                 </dd>
+
               </div>
 
             </dl>
@@ -63,13 +115,17 @@
 
     } @else {
 
-      <p>No security events found.</p>
+      <p>
+        {{ 'security.noEvents' | translate }}
+      </p>
 
     }
 
   } @else {
 
-    <p>Loading security events...</p>
+    <p>
+      {{ 'security.loading' | translate }}
+    </p>
 
   }
 

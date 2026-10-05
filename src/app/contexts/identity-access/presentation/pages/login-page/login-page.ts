@@ -11,18 +11,26 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
+import {
+  TranslatePipe,
+  TranslateService
+} from '@ngx-translate/core';
+
 import { LoginUseCase } from '../../../application/use-cases/login.use-case';
 import { AuthSessionService } from '../../../application/services/auth-session.service';
 
 @Component({
   selector: 'app-login-page',
+
   imports: [
     ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    TranslatePipe
   ],
+
   templateUrl: './login-page.html',
   styleUrl: './login-page.scss'
 })
@@ -40,9 +48,13 @@ export class LoginPage {
   private readonly router =
     inject(Router);
 
-  readonly isLoading = signal(false);
+  readonly translate =
+    inject(TranslateService);
 
-  readonly errorMessage =
+  readonly isLoading =
+    signal(false);
+
+  readonly errorKey =
     signal<string | null>(null);
 
   readonly form =
@@ -65,15 +77,26 @@ export class LoginPage {
 
     });
 
+  changeLanguage(
+    language: 'en-US' | 'es-419'
+  ): void {
+
+    this.translate.use(language);
+
+  }
+
   submit(): void {
 
     if (this.form.invalid) {
+
       this.form.markAllAsTouched();
+
       return;
+
     }
 
     this.isLoading.set(true);
-    this.errorMessage.set(null);
+    this.errorKey.set(null);
 
     this.loginUseCase
       .execute(this.form.getRawValue())
@@ -84,28 +107,33 @@ export class LoginPage {
           this.isLoading.set(false);
 
           if (!user) {
-            this.errorMessage.set(
-              'Invalid email or password.'
+
+            this.errorKey.set(
+              'login.invalidCredentials'
             );
 
             return;
+
           }
 
           this.session.setUser(user);
 
           this.router.navigate(['/dashboard']);
+
         },
 
         error: () => {
 
           this.isLoading.set(false);
 
-          this.errorMessage.set(
-            'Unable to connect to the authentication service.'
+          this.errorKey.set(
+            'login.connectionError'
           );
 
         }
 
       });
+
   }
+
 }

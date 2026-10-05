@@ -2,92 +2,94 @@
 
   @if (overview$ | async; as overview) {
 
-    <header>
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="page-header">
+
       <div>
-        <h1>{{ overview.home.name }}</h1>
-        <p>{{ overview.home.location }}</p>
+
+        <h1>
+          {{ 'dashboard.title' | translate }}
+        </h1>
+
+        <p>
+          {{ 'dashboard.subtitle' | translate }}
+          ·
+          {{ overview.home.name }}
+        </p>
+
       </div>
+
+      <div class="home-selector">
+        {{ overview.home.name }}
+      </div>
+
     </header>
+
+
+    <!-- =====================================================
+         ALERT CTA
+         ===================================================== -->
+
+    @if (overview.alerts.length > 0) {
+
+      <section class="alert-banner">
+
+        <div class="alert-banner-content">
+
+          <span class="alert-banner-dot"></span>
+
+          <div>
+
+            <strong>
+              {{ 'dashboard.alertBannerTitle' | translate }}
+            </strong>
+
+            <p>
+              {{ overview.alerts.length }}
+              {{ 'dashboard.activeAlerts' | translate }}
+            </p>
+
+          </div>
+
+        </div>
+
+        <a
+          routerLink="/alerts"
+          class="ds-button ds-button--accent">
+
+          {{ 'dashboard.reviewAlerts' | translate }}
+
+        </a>
+
+      </section>
+
+    }
+
+
+    <!-- =====================================================
+         SUMMARY
+         ===================================================== -->
 
     <section class="summary-grid">
 
-      <!-- Temperature -->
+      <!-- Devices -->
 
       <article class="summary-card">
 
-        <span class="card-label">
-          Temperature
+        <span class="summary-label">
+          {{ 'dashboard.devices' | translate }}
         </span>
 
-        @if (overview.temperature) {
+        <strong class="summary-value">
+          {{ overview.devices.length }}
+        </strong>
 
-          <h2>
-            {{ overview.temperature.temperature }} °C
-          </h2>
-
-          <span>
-            {{ overview.temperature.status }}
-          </span>
-
-        } @else {
-
-          <p>No data available.</p>
-
-        }
-
-      </article>
-
-
-      <!-- Security -->
-
-      <article class="summary-card">
-
-        <span class="card-label">
-          Security
+        <span class="summary-description">
+          {{ 'dashboard.registeredDevices' | translate }}
         </span>
-
-        @if (overview.security) {
-
-          <h2>
-            {{ overview.security.status }}
-          </h2>
-
-          <span>
-            {{ overview.security.location }}
-          </span>
-
-        } @else {
-
-          <p>No data available.</p>
-
-        }
-
-      </article>
-
-
-      <!-- Power -->
-
-      <article class="summary-card">
-
-        <span class="card-label">
-          Electrical Protection
-        </span>
-
-        @if (overview.power) {
-
-          <h2>
-            {{ overview.power.status }}
-          </h2>
-
-          <span>
-            {{ overview.power.voltage }} V
-          </span>
-
-        } @else {
-
-          <p>No data available.</p>
-
-        }
 
       </article>
 
@@ -96,75 +98,339 @@
 
       <article class="summary-card">
 
-        <span class="card-label">
-          Alerts
+        <span class="summary-label">
+          {{ 'dashboard.activeAlertsLabel' | translate }}
         </span>
 
-        <h2>
+        <strong class="summary-value">
           {{ overview.alerts.length }}
-        </h2>
+        </strong>
 
-        <span>
-          Registered alerts
+        <span class="summary-description">
+          {{ 'dashboard.registeredAlerts' | translate }}
         </span>
+
+      </article>
+
+
+      <!-- Temperature -->
+
+      <article class="summary-card">
+
+        <span class="summary-label">
+          {{ 'navigation.temperature' | translate }}
+        </span>
+
+        @if (overview.temperature) {
+
+          <strong class="summary-value">
+            {{ overview.temperature.temperature }} °C
+          </strong>
+
+          <span
+            [class]="getStatusClass(
+              overview.temperature.status
+            )">
+
+            {{
+              (
+                'status.' +
+                overview.temperature.status
+              ) | translate
+            }}
+
+          </span>
+
+        } @else {
+
+          <span class="summary-description">
+            {{ 'dashboard.noData' | translate }}
+          </span>
+
+        }
+
+      </article>
+
+
+      <!-- Electrical -->
+
+      <article class="summary-card">
+
+        <span class="summary-label">
+          {{ 'navigation.power' | translate }}
+        </span>
+
+        @if (overview.power) {
+
+          <strong class="summary-value status-value">
+
+            {{
+              (
+                'status.' +
+                overview.power.status
+              ) | translate
+            }}
+
+          </strong>
+
+          <span class="summary-description">
+            {{ overview.power.voltage }} V
+          </span>
+
+        } @else {
+
+          <span class="summary-description">
+            {{ 'dashboard.noData' | translate }}
+          </span>
+
+        }
 
       </article>
 
     </section>
 
 
-    <section class="recent-alerts">
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
 
-      <h2>Recent Alerts</h2>
+    <div class="dashboard-content">
 
-      @if (overview.alerts.length > 0) {
 
-        @for (
-          alert of overview.alerts;
-          track alert.id
-          ) {
+      <!-- ===================================================
+           LEFT COLUMN
+           =================================================== -->
 
-          <article class="alert-item">
+      <div class="dashboard-main">
 
-            <div>
 
-              <strong>
-                {{ alert.title }}
-              </strong>
+        <!-- Devices -->
+
+        <section class="devices-section">
+
+          <div class="section-header">
+
+            <h2>
+              {{ 'dashboard.devicesByArea' | translate }}
+            </h2>
+
+          </div>
+
+
+          @if (overview.devices.length > 0) {
+
+            <div class="device-grid">
+
+              @for (
+                device of overview.devices;
+                track device.id
+                ) {
+
+                <a
+                  class="device-card"
+                  [routerLink]="getDeviceRoute(device)">
+
+                  <div class="device-icon">
+                    <span></span>
+                  </div>
+
+                  <div class="device-content">
+
+                    <h3>
+                      {{ device.name }}
+                    </h3>
+
+                    <p>
+                      {{ device.location }}
+                    </p>
+
+                    <div class="device-footer">
+
+                      <span>
+                        {{
+                          getDeviceTypeLabel(device)
+                            | translate
+                        }}
+                      </span>
+
+                      <span
+                        [class]="getStatusClass(
+                          device.status
+                        )">
+
+                        {{
+                          (
+                            'status.' +
+                            device.status
+                          ) | translate
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </a>
+
+              }
+
+            </div>
+
+          } @else {
+
+            <div class="empty-state">
 
               <p>
-                {{ alert.description }}
+                {{ 'dashboard.noDevices' | translate }}
               </p>
 
             </div>
 
-            <div class="alert-meta">
+          }
 
-              <span>
-                {{ alert.severity }}
-              </span>
+        </section>
 
-              <time>
-                {{ alert.createdAt | date:'medium' }}
-              </time>
 
-            </div>
+        <!-- Quick actions -->
 
-          </article>
+        <section class="quick-actions ds-card">
+
+          <h2>
+            {{ 'dashboard.quickActions' | translate }}
+          </h2>
+
+          <div class="quick-action-buttons">
+
+            <a
+              routerLink="/alerts"
+              class="ds-button ds-button--primary">
+
+              {{ 'navigation.alerts' | translate }}
+
+            </a>
+
+            <a
+              routerLink="/monitoring/temperature"
+              class="ds-button ds-button--secondary">
+
+              {{ 'navigation.temperature' | translate }}
+
+            </a>
+
+            <a
+              routerLink="/monitoring/security"
+              class="ds-button ds-button--secondary">
+
+              {{ 'navigation.security' | translate }}
+
+            </a>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- ===================================================
+           ALERTS COLUMN
+           =================================================== -->
+
+      <aside class="recent-alerts ds-card">
+
+        <div class="section-header">
+
+          <h2>
+            {{ 'dashboard.recentAlerts' | translate }}
+          </h2>
+
+        </div>
+
+
+        @if (overview.alerts.length > 0) {
+
+          <div class="alerts-list">
+
+            @for (
+              alert of overview.alerts;
+              track alert.id
+              ) {
+
+              <article
+                class="recent-alert"
+                [class.alert-critical]="
+                  alert.severity === 'CRITICAL'
+                "
+                [class.alert-warning]="
+                  alert.severity === 'WARNING'
+                ">
+
+                <div class="alert-indicator"></div>
+
+                <div class="alert-content">
+
+                  <strong>
+                    {{ alert.title }}
+                  </strong>
+
+                  <p>
+                    {{ alert.description }}
+                  </p>
+
+                  <time>
+                    {{
+                      alert.createdAt
+                        | date:'short'
+                    }}
+                  </time>
+
+                </div>
+
+              </article>
+
+            }
+
+          </div>
+
+
+          <a
+            routerLink="/alerts"
+            class="
+              ds-button
+              ds-button--secondary
+              alerts-button
+            ">
+
+            {{ 'dashboard.goToAlerts' | translate }}
+
+          </a>
+
+        } @else {
+
+          <div class="empty-state">
+
+            <p>
+              {{ 'dashboard.noAlerts' | translate }}
+            </p>
+
+          </div>
 
         }
 
-      } @else {
+      </aside>
 
-        <p>No alerts found.</p>
-
-      }
-
-    </section>
+    </div>
 
   } @else {
 
-    <p>Loading home overview...</p>
+    <div class="loading-state">
+
+      <p>
+        {{ 'dashboard.loading' | translate }}
+      </p>
+
+    </div>
 
   }
 

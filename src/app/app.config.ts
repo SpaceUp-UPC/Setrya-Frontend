@@ -9,6 +9,8 @@ import { SpaceManagementRepository } from './contexts/space-management/domain/re
 import { HttpSpaceManagementRepository } from './contexts/space-management/infrastructure/repositories/http-space-management.repository';
 import { AuthRepository } from './contexts/identity-access/domain/repositories/auth.repository';
 import { HttpAuthRepository } from './contexts/identity-access/infrastructure/repositories/http-auth.repository';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,6 +31,13 @@ export const appConfig: ApplicationConfig = {
       useClass: HttpAuthRepository
     },
     provideClientHydration(),
-
+    provideTranslateService({
+      loader: provideTranslateHttpLoader({
+        prefix: './i18n/',
+        suffix: '.json'
+      }),
+      fallbackLang: 'en-US',
+      lang: 'en-US'
+    })
   ],
 };
