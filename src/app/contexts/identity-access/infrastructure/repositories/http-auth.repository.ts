@@ -1,48 +1,55 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import {
+  map,
+  Observable
+} from 'rxjs';
+
+import { environment } from '../../../../../environments/environment';
 
 import { AuthRepository } from '../../domain/repositories/auth.repository';
+
 import { LoginCredentials } from '../../domain/models/login-credentials';
 import { User } from '../../domain/models/user';
-import { UserRole } from '../../domain/enums/user-role';
 
-interface UserResponse {
-  id: number;
-  name: string;
-  email: string;
+
+interface FakeApiUser extends User {
   password: string;
-  role: UserRole;
 }
 
+
 @Injectable()
-export class HttpAuthRepository extends AuthRepository {
+export class HttpAuthRepository
+  extends AuthRepository {
 
-  private readonly apiUrl = 'http://localhost:3000';
+  private readonly http =
+    inject(HttpClient);
 
-  constructor(
-    private readonly http: HttpClient
-  ) {
-    super();
-  }
+  private readonly apiUrl =
+    environment.apiUrl;
+
 
   login(
     credentials: LoginCredentials
   ): Observable<User | null> {
 
-    const params = new HttpParams()
-      .set('email', credentials.email)
-      .set('password', credentials.password);
-
     return this.http
-      .get<UserResponse[]>(
+      .get<FakeApiUser[]>(
         `${this.apiUrl}/users`,
-        { params }
+        {
+          params: {
+            email: credentials.email,
+            password: credentials.password
+          }
+        }
       )
       .pipe(
+
         map(users => {
 
-          const user = users[0];
+          const user =
+            users[0];
 
           if (!user) {
             return null;
@@ -56,6 +63,9 @@ export class HttpAuthRepository extends AuthRepository {
           };
 
         })
+
       );
+
   }
+
 }
