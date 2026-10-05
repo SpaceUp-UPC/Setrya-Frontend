@@ -1,8 +1,15 @@
 <section class="power-page">
 
   <header>
-    <h1>Electrical Protection</h1>
-    <p>Electrical measurements and protection status.</p>
+
+    <h1>
+      {{ 'power.title' | translate }}
+    </h1>
+
+    <p>
+      {{ 'power.subtitle' | translate }}
+    </p>
+
   </header>
 
   @if (readings$ | async; as readings) {
@@ -16,43 +23,90 @@
           <article class="reading-card">
 
             <div class="reading-header">
-              <h2>{{ reading.status }}</h2>
+
+              <h2>
+                {{
+                  ('status.' + reading.status)
+                    | translate
+                }}
+              </h2>
 
               <span>
-                Relay:
-                {{ reading.relayEnabled ? 'Enabled' : 'Disabled' }}
+
+                {{ 'power.relay' | translate }}:
+
+                {{
+                  (
+                    reading.relayEnabled
+                      ? 'common.enabled'
+                      : 'common.disabled'
+                  ) | translate
+                }}
+
               </span>
+
             </div>
 
             <dl>
 
               <div>
-                <dt>Voltage</dt>
-                <dd>{{ reading.voltage }} V</dd>
+
+                <dt>
+                  {{ 'power.voltage' | translate }}
+                </dt>
+
+                <dd>
+                  {{ reading.voltage }} V
+                </dd>
+
               </div>
 
               <div>
-                <dt>Current</dt>
-                <dd>{{ reading.current }} A</dd>
+
+                <dt>
+                  {{ 'power.current' | translate }}
+                </dt>
+
+                <dd>
+                  {{ reading.current }} A
+                </dd>
+
               </div>
 
               <div>
-                <dt>Power</dt>
-                <dd>{{ reading.power }} W</dd>
+
+                <dt>
+                  {{ 'power.power' | translate }}
+                </dt>
+
+                <dd>
+                  {{ reading.power }} W
+                </dd>
+
               </div>
 
               <div>
-                <dt>Accumulated consumption</dt>
+
+                <dt>
+                  {{ 'power.consumption' | translate }}
+                </dt>
+
                 <dd>
                   {{ reading.accumulatedConsumption }} kWh
                 </dd>
+
               </div>
 
               <div>
-                <dt>Recorded at</dt>
+
+                <dt>
+                  {{ 'power.recordedAt' | translate }}
+                </dt>
+
                 <dd>
                   {{ reading.recordedAt | date:'medium' }}
                 </dd>
+
               </div>
 
             </dl>
@@ -65,13 +119,17 @@
 
     } @else {
 
-      <p>No electrical readings found.</p>
+      <p>
+        {{ 'power.noReadings' | translate }}
+      </p>
 
     }
 
   } @else {
 
-    <p>Loading electrical data...</p>
+    <p>
+      {{ 'power.loading' | translate }}
+    </p>
 
   }
 
