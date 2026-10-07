@@ -1,0 +1,394 @@
+@use '@angular/material' as mat;
+
+/* =========================================================
+   SENTRYA / SETRYA DESIGN SYSTEM
+   Foundation & Components
+   ========================================================= */
+
+:root {
+  /* Brand */
+  --color-primary: #2C3E50;
+  --color-accent: #D4A373;
+
+  /* Base */
+  --color-background: #F8F9FA;
+  --color-surface: #FFFFFF;
+  --color-text: #333333;
+
+  /* Supporting neutrals */
+  --color-text-secondary: #7A8491;
+  --color-border: #E2E6EA;
+  --color-hover: #F1F3F5;
+
+  /* Navigation */
+  --color-nav-active: #F5EADF;
+
+  /* Status */
+  --color-normal-bg: #EDF2F5;
+  --color-normal-text: #2C3E50;
+
+  --color-warning-bg: #FFF0D2;
+  --color-warning-text: #A86500;
+
+  --color-critical-bg: #FBE4E2;
+  --color-critical-text: #C4433B;
+
+  --color-success-bg: #E4F3EB;
+  --color-success-text: #247A55;
+
+  --color-info-bg: #E6F0F6;
+  --color-info-text: #326D91;
+
+  /* Layout */
+  --sidebar-width: 240px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* Shadows */
+  --shadow-card:
+    0 4px 18px rgba(44, 62, 80, 0.08);
+}
+
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+
+  font-family:
+    Inter,
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-primary);
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+
+p {
+  color: var(--color-text-secondary);
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.skip-link {
+  position: fixed;
+
+  top: 0.75rem;
+  left: 0.75rem;
+
+  z-index: 9999;
+
+  padding:
+    0.75rem
+    1rem;
+
+  border-radius: var(--radius-sm);
+
+  background: var(--color-primary);
+  color: #FFFFFF;
+
+  text-decoration: none;
+
+  transform: translateY(-200%);
+
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+
+:focus-visible {
+  outline:
+    3px solid
+    rgba(212, 163, 115, 0.75);
+
+  outline-offset: 3px;
+}
+
+
+/* =========================================================
+   SURFACES / CARDS
+   ========================================================= */
+
+.ds-card {
+  background: var(--color-surface);
+
+  border:
+    1px solid var(--color-border);
+
+  border-radius: var(--radius-lg);
+
+  padding: 1.5rem;
+
+  box-shadow: var(--shadow-card);
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.ds-button {
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: var(--radius-md);
+
+  padding:
+    0.75rem
+    1.25rem;
+
+  border:
+    1px solid transparent;
+
+  font-weight: 500;
+
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.ds-button:hover {
+  transform: translateY(-1px);
+}
+
+.ds-button:active {
+  transform: translateY(0);
+}
+
+
+.ds-button--primary {
+  background: var(--color-primary);
+  color: #FFFFFF;
+}
+
+.ds-button--primary:hover {
+  background: #243444;
+}
+
+
+.ds-button--secondary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+
+  border-color: var(--color-border);
+}
+
+.ds-button--secondary:hover {
+  background: var(--color-hover);
+}
+
+
+.ds-button--accent {
+  background: var(--color-accent);
+  color: var(--color-text);
+}
+
+.ds-button--accent:hover {
+  background: #C99666;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+.ds-status {
+  width: fit-content;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    0.4rem
+    0.75rem;
+
+  border-radius: 999px;
+
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.ds-status--normal {
+  background: var(--color-normal-bg);
+  color: var(--color-normal-text);
+}
+
+.ds-status--warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
+}
+
+.ds-status--critical {
+  background: var(--color-critical-bg);
+  color: var(--color-critical-text);
+}
+
+.ds-status--success {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+}
+
+.ds-status--info {
+  background: var(--color-info-bg);
+  color: var(--color-info-text);
+}
+
+
+/* =========================================================
+   ACCENT DOT
+   ========================================================= */
+
+.ds-dot {
+  display: inline-block;
+
+  width: 8px;
+  height: 8px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--color-accent);
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.ds-input {
+  width: 100%;
+  min-height: 48px;
+
+  background: var(--color-surface);
+  color: var(--color-text);
+
+  border:
+    1px solid var(--color-border);
+
+  border-radius: var(--radius-md);
+
+  padding:
+    0
+    1rem;
+
+  outline: none;
+}
+
+.ds-input:focus {
+  border-color: var(--color-primary);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(44, 62, 80, 0.08);
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    transition-duration:
+      0.01ms !important;
+
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  h1 {
+    font-size: 1.65rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+}

@@ -1,0 +1,403 @@
+<section class="temperature-page">
+
+  @if (detail$ | async; as detail) {
+
+    @if (detail) {
+
+      <!-- HEADER -->
+
+      <header class="page-header">
+
+        <div>
+
+          <p class="eyebrow">
+            {{ 'temperature.deviceDetail' | translate }}
+          </p>
+
+          <h1>
+            {{ detail.device.name }}
+          </h1>
+
+          <p>
+            {{ detail.device.location }}
+            ·
+            {{ detail.device.code ?? '-' }}
+          </p>
+
+        </div>
+
+        <span class="ds-status ds-status--success">
+          {{ 'temperature.online' | translate }}
+        </span>
+
+      </header>
+
+
+      <!-- MAIN STATUS -->
+
+      <section class="temperature-hero ds-card">
+
+        <div class="temperature-current">
+
+          <span class="temperature-label">
+            {{ 'temperature.current' | translate }}
+          </span>
+
+          @if (detail.currentReading) {
+
+            <strong>
+              {{
+                detail.currentReading.temperature
+                  | number:'1.1-1'
+              }} °C
+            </strong>
+
+            <span
+              class="ds-status ds-status--normal">
+
+              {{
+                (
+                  'status.' +
+                  detail.currentReading.status
+                ) | translate
+              }}
+
+            </span>
+
+          }
+
+        </div>
+
+
+        @if (detail.currentReading) {
+
+          <div class="thresholds">
+
+            <div class="threshold">
+
+              <span class="threshold-dot normal"></span>
+
+              <div>
+                <small>
+                  {{ 'temperature.normal' | translate }}
+                </small>
+
+                <strong>
+                  &lt;
+                  {{ detail.currentReading.threshold1 }} °C
+                </strong>
+              </div>
+
+            </div>
+
+
+            <div class="threshold">
+
+              <span class="threshold-dot warning"></span>
+
+              <div>
+                <small>
+                  {{ 'temperature.warningThreshold' | translate }}
+                </small>
+
+                <strong>
+                  {{
+                    detail.currentReading.threshold1
+                  }}
+                  -
+                  {{
+                    detail.currentReading.threshold2
+                  }} °C
+                </strong>
+              </div>
+
+            </div>
+
+
+            <div class="threshold">
+
+              <span class="threshold-dot critical"></span>
+
+              <div>
+                <small>
+                  {{ 'temperature.criticalThreshold' | translate }}
+                </small>
+
+                <strong>
+                  ≥
+                  {{ detail.currentReading.threshold2 }} °C
+                </strong>
+              </div>
+
+            </div>
+
+          </div>
+
+        }
+
+      </section>
+
+
+      <div class="temperature-layout">
+
+        <!-- LEFT -->
+
+        <div class="temperature-main">
+
+          <!-- HISTORY -->
+
+          <section class="history-card ds-card">
+
+            <div class="section-header">
+
+              <div>
+
+                <h2>
+                  {{ 'temperature.history' | translate }}
+                </h2>
+
+                <p>
+                  {{ 'temperature.historySubtitle' | translate }}
+                </p>
+
+              </div>
+
+            </div>
+
+
+            @if (detail.readings.length > 0) {
+
+              <div class="chart">
+
+                @for (
+                  reading of detail.readings;
+                  track reading.id
+                  ) {
+
+                  <div class="chart-column">
+
+                    <span class="chart-value">
+                      {{
+                        reading.temperature
+                          | number:'1.1-1'
+                      }}°
+                    </span>
+
+                    <div class="chart-track">
+
+                      <div
+                        class="chart-bar"
+                        [style.height.%]="
+                          getBarHeight(
+                            reading.temperature,
+                            detail.readings
+                          )
+                        ">
+                      </div>
+
+                    </div>
+
+                    <time>
+                      {{
+                        reading.recordedAt
+                          | date:'HH:mm'
+                      }}
+                    </time>
+
+                  </div>
+
+                }
+
+              </div>
+
+            }
+
+          </section>
+
+
+          <!-- RECENT EVENTS -->
+
+          <section class="recent-events ds-card">
+
+            <h2>
+              {{ 'temperature.recentEvents' | translate }}
+            </h2>
+
+            @if (detail.readings.length > 0) {
+
+              <div class="events-list">
+
+                @for (
+                  reading of detail.readings.slice().reverse().slice(0, 3);
+                  track reading.id
+                  ) {
+
+                  <div class="event-row">
+
+                    <span class="ds-dot"></span>
+
+                    <div>
+
+                      <strong>
+                        {{
+                          reading.temperature
+                            | number:'1.1-1'
+                        }} °C
+                      </strong>
+
+                      <span>
+                        {{
+                          (
+                            'status.' +
+                            reading.status
+                          ) | translate
+                        }}
+                      </span>
+
+                    </div>
+
+                    <time>
+                      {{
+                        reading.recordedAt
+                          | date:'short'
+                      }}
+                    </time>
+
+                  </div>
+
+                }
+
+              </div>
+
+            }
+
+          </section>
+
+        </div>
+
+
+        <!-- RIGHT -->
+
+        <aside class="device-info ds-card">
+
+          <h2>
+            {{ 'temperature.deviceInformation' | translate }}
+          </h2>
+
+          <dl>
+
+            <div>
+
+              <dt>
+                {{ 'temperature.deviceId' | translate }}
+              </dt>
+
+              <dd>
+                {{ detail.device.code ?? '-' }}
+              </dd>
+
+            </div>
+
+
+            <div>
+
+              <dt>
+                {{ 'temperature.location' | translate }}
+              </dt>
+
+              <dd>
+                {{ detail.device.location }}
+              </dd>
+
+            </div>
+
+
+            <div>
+
+              <dt>
+                {{ 'temperature.battery' | translate }}
+              </dt>
+
+              <dd>
+                {{
+                  detail.device.batteryLevel ?? '-'
+                }}%
+              </dd>
+
+            </div>
+
+
+            <div>
+
+              <dt>
+                {{ 'temperature.lastSignal' | translate }}
+              </dt>
+
+              <dd>
+
+                @if (detail.device.lastSignalAt) {
+
+                  {{
+                    detail.device.lastSignalAt
+                      | date:'medium'
+                  }}
+
+                } @else {
+
+                  -
+
+                }
+
+              </dd>
+
+            </div>
+
+
+            <div>
+
+              <dt>
+                {{ 'temperature.statusLabel' | translate }}
+              </dt>
+
+              <dd>
+                {{
+                  (
+                    'status.' +
+                    detail.device.status
+                  ) | translate
+                }}
+              </dd>
+
+            </div>
+
+          </dl>
+
+        </aside>
+
+      </div>
+
+    } @else {
+
+      <div class="empty-state ds-card">
+
+        <p>
+          {{ 'temperature.noDevice' | translate }}
+        </p>
+
+      </div>
+
+    }
+
+  } @else {
+
+    <div class="loading-state">
+
+      <p>
+        {{ 'temperature.loading' | translate }}
+      </p>
+
+    </div>
+
+  }
+
+</section>

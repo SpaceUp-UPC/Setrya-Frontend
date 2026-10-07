@@ -1,0 +1,49 @@
+.power-page {
+  max-width: 1000px;
+}
+
+header {
+  margin-bottom: 2rem;
+}
+
+.readings {
+  display: grid;
+  gap: 1rem;
+}
+
+.reading-card {
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+}
+
+.reading-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+dl {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  dt {
+    font-weight: 600;
+  }
+
+  dd {
+    margin: 0;
+  }
+}

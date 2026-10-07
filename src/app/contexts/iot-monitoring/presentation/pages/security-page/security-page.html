@@ -1,0 +1,132 @@
+<section class="security-page">
+
+  <header>
+
+    <h1>
+      {{ 'security.title' | translate }}
+    </h1>
+
+    <p>
+      {{ 'security.subtitle' | translate }}
+    </p>
+
+  </header>
+
+  @if (events$ | async; as events) {
+
+    @if (events.length > 0) {
+
+      <div class="events">
+
+        @for (event of events; track event.id) {
+
+          <article class="event-card">
+
+            <div class="event-header">
+
+              <h2>
+                {{ event.location }}
+              </h2>
+
+              <span>
+                {{
+                  ('status.' + event.status)
+                    | translate
+                }}
+              </span>
+
+            </div>
+
+            <dl>
+
+              <div>
+
+                <dt>
+                  {{ 'security.personDetected' | translate }}
+                </dt>
+
+                <dd>
+                  {{
+                    (
+                      event.personDetected
+                        ? 'common.yes'
+                        : 'common.no'
+                    ) | translate
+                  }}
+                </dd>
+
+              </div>
+
+              <div>
+
+                <dt>
+                  {{ 'security.personRecognized' | translate }}
+                </dt>
+
+                <dd>
+                  {{
+                    (
+                      event.personRecognized
+                        ? 'common.yes'
+                        : 'common.no'
+                    ) | translate
+                  }}
+                </dd>
+
+              </div>
+
+              <div>
+
+                <dt>
+                  {{ 'security.suspiciousSound' | translate }}
+                </dt>
+
+                <dd>
+                  {{
+                    (
+                      event.suspiciousSound
+                        ? 'common.yes'
+                        : 'common.no'
+                    ) | translate
+                  }}
+                </dd>
+
+              </div>
+
+              <div>
+
+                <dt>
+                  {{ 'security.recordedAt' | translate }}
+                </dt>
+
+                <dd>
+                  {{ event.recordedAt | date:'medium' }}
+                </dd>
+
+              </div>
+
+            </dl>
+
+          </article>
+
+        }
+
+      </div>
+
+    } @else {
+
+      <p>
+        {{ 'security.noEvents' | translate }}
+      </p>
+
+    }
+
+  } @else {
+
+    <p>
+      {{ 'security.loading' | translate }}
+    </p>
+
+  }
+
+</section>

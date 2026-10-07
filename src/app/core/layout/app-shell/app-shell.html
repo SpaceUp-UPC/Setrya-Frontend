@@ -1,0 +1,216 @@
+<a
+  class="skip-link"
+  href="#main-content">
+
+  {{ 'accessibility.skipToContent' | translate }}
+
+</a>
+
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+
+    <!-- Brand -->
+
+    <div class="brand">
+
+      <div
+        class="brand-icon"
+        aria-hidden="true">
+        S
+      </div>
+
+      <span class="brand-name">
+        {{ 'common.appName' | translate }}
+      </span>
+
+    </div>
+
+
+    <!-- Navigation -->
+
+    <nav
+      class="navigation"
+      [attr.aria-label]="
+        'accessibility.mainNavigation'
+          | translate
+      ">
+
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        class="nav-link">
+
+        <span
+          class="ds-dot"
+          aria-hidden="true">
+        </span>
+
+        <span>
+          {{ 'navigation.dashboard' | translate }}
+        </span>
+
+      </a>
+
+
+      <a
+        routerLink="/monitoring/temperature"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        class="nav-link">
+
+        <span
+          class="ds-dot"
+          aria-hidden="true">
+        </span>
+
+        <span>
+          {{ 'navigation.temperature' | translate }}
+        </span>
+
+      </a>
+
+
+      <a
+        routerLink="/monitoring/security"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        class="nav-link">
+
+        <span
+          class="ds-dot"
+          aria-hidden="true">
+        </span>
+
+        <span>
+          {{ 'navigation.security' | translate }}
+        </span>
+
+      </a>
+
+
+      <a
+        routerLink="/monitoring/power"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        class="nav-link">
+
+        <span
+          class="ds-dot"
+          aria-hidden="true">
+        </span>
+
+        <span>
+          {{ 'navigation.power' | translate }}
+        </span>
+
+      </a>
+
+
+      <a
+        routerLink="/alerts"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        class="nav-link">
+
+        <span
+          class="ds-dot"
+          aria-hidden="true">
+        </span>
+
+        <span>
+          {{ 'navigation.alerts' | translate }}
+        </span>
+
+      </a>
+
+    </nav>
+
+
+    <!-- Bottom -->
+
+    <div class="sidebar-footer">
+
+      <div
+        class="language-selector"
+        role="group"
+        [attr.aria-label]="
+          'accessibility.languageSelector'
+            | translate
+        ">
+
+        <button
+          class="language-button"
+          type="button"
+          (click)="changeLanguage('en-US')"
+          [attr.aria-label]="
+            'accessibility.changeToEnglish'
+              | translate
+          ">
+          EN
+        </button>
+
+        <button
+          class="language-button"
+          type="button"
+          (click)="changeLanguage('es-419')"
+          [attr.aria-label]="
+            'accessibility.changeToSpanish'
+              | translate
+          ">
+          ES
+        </button>
+
+      </div>
+
+
+      @if (session.currentUser(); as user) {
+
+        <div class="user-section">
+
+          <div
+            class="user-avatar"
+            aria-hidden="true">
+
+            {{ user.name.charAt(0).toUpperCase() }}
+
+          </div>
+
+          <div class="user-info">
+
+            <span class="user-name">
+              {{ user.name }}
+            </span>
+
+            <button
+              class="logout-button"
+              type="button"
+              (click)="logout()">
+
+              {{ 'common.signOut' | translate }}
+
+            </button>
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  </aside>
+
+
+  <main
+    id="main-content"
+    class="content"
+    tabindex="-1">
+
+    <router-outlet />
+
+  </main>
+
+</div>
