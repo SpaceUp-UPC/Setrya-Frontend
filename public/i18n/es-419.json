@@ -49,7 +49,16 @@
     "heroDescription": "Accede a Setrya para supervisar tus dispositivos, revisar alertas y cuidar lo que más importa, estés donde estés.",
     "heroBenefitSecurity": "Acceso protegido",
     "heroBenefitMonitoring": "Monitoreo continuo",
-    "heroFooter": "Protección conectada"
+    "heroFooter": "Protección conectada",
+
+    "serviceError": "El servicio de autenticación no pudo procesar la solicitud.",
+    "unsupportedRole": "Este tipo de cuenta aún no dispone de acceso a la aplicación."
+  },
+
+  "implementer": {
+    "pendingTitle": "Panel del implementador",
+    "pendingDescription": "Has iniciado sesión correctamente. El panel de implementadores se encuentra en desarrollo.",
+    "signedInAs": "Sesión iniciada como:"
   },
 
   "dashboard": {

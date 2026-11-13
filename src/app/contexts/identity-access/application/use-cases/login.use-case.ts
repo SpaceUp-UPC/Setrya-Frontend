@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import { AuthRepository } from '../../domain/repositories/auth.repository';
 import { LoginCredentials } from '../../domain/models/login-credentials';
-import { User } from '../../domain/models/user';
+import { AuthenticatedSession } from '../../domain/models/authenticated-session';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,10 @@ export class LoginUseCase {
 
   execute(
     credentials: LoginCredentials
-  ): Observable<User | null> {
+  ): Observable<AuthenticatedSession> {
+
     return this.repository.login(credentials);
+
   }
+
 }

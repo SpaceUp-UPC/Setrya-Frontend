@@ -49,7 +49,16 @@
     "heroDescription": "Access Setrya to monitor your devices, review alerts and stay connected with what matters most, wherever you are.",
     "heroBenefitSecurity": "Protected access",
     "heroBenefitMonitoring": "Continuous monitoring",
-    "heroFooter": "Connected protection"
+    "heroFooter": "Connected protection",
+
+    "serviceError": "The authentication service could not process the request.",
+    "unsupportedRole": "This account type does not have access to the application yet."
+  },
+
+  "implementer": {
+    "pendingTitle": "Implementer dashboard",
+    "pendingDescription": "You have signed in successfully. The implementer dashboard is under development.",
+    "signedInAs": "Signed in as:"
   },
 
   "dashboard": {
@@ -172,3 +181,4 @@
     "EMERGENCY": "Emergency"
   }
 }
+

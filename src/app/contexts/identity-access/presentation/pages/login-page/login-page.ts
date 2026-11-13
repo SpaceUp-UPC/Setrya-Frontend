@@ -1,9 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import {
   FormBuilder,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+
 import { Router } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -18,6 +21,7 @@ import {
 
 import { LoginUseCase } from '../../../application/use-cases/login.use-case';
 import { AuthSessionService } from '../../../application/services/auth-session.service';
+import { UserRole } from '../../../domain/enums/user-role';
 
 @Component({
   selector: 'app-login-page',
@@ -36,46 +40,38 @@ import { AuthSessionService } from '../../../application/services/auth-session.s
 })
 export class LoginPage {
 
-  private readonly formBuilder =
-    inject(FormBuilder);
+  private readonly formBuilder = inject(FormBuilder);
 
-  private readonly loginUseCase =
-    inject(LoginUseCase);
+  private readonly loginUseCase = inject(LoginUseCase);
 
-  private readonly session =
-    inject(AuthSessionService);
+  private readonly session = inject(AuthSessionService);
 
-  private readonly router =
-    inject(Router);
+  private readonly router = inject(Router);
 
-  readonly translate =
-    inject(TranslateService);
+  readonly translate = inject(TranslateService);
 
-  readonly isLoading =
-    signal(false);
+  readonly isLoading = signal(false);
 
-  readonly errorKey =
-    signal<string | null>(null);
+  readonly errorKey = signal<string | null>(null);
 
-  readonly form =
-    this.formBuilder.nonNullable.group({
+  readonly form = this.formBuilder.nonNullable.group({
 
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
-
-      password: [
-        '',
-        [
-          Validators.required
-        ]
+    email: [
+      '',
+      [
+        Validators.required,
+        Validators.email
       ]
+    ],
 
-    });
+    password: [
+      '',
+      [
+        Validators.required
+      ]
+    ]
+
+  });
 
   changeLanguage(
     language: 'en-US' | 'es-419'
@@ -87,12 +83,13 @@ export class LoginPage {
 
   submit(): void {
 
-    if (this.form.invalid) {
-
-      this.form.markAllAsTouched();
-
+    if (this.isLoading()) {
       return;
+    }
 
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
     }
 
     this.isLoading.set(true);
@@ -102,33 +99,53 @@ export class LoginPage {
       .execute(this.form.getRawValue())
       .subscribe({
 
-        next: user => {
+        next: authenticatedSession => {
 
           this.isLoading.set(false);
 
-          if (!user) {
-
-            this.errorKey.set(
-              'login.invalidCredentials'
-            );
-
+          if (!this.session.setSession(authenticatedSession)) {
+            this.errorKey.set('login.serviceError');
             return;
-
           }
 
-          this.session.setUser(user);
+          const role = authenticatedSession.user.role;
 
-          this.router.navigate(['/dashboard']);
+          const destination =
+            role === UserRole.IMPLEMENTER
+              ? '/implementer'
+              : '/dashboard';
+
+          void this.router.navigateByUrl(destination);
 
         },
 
-        error: () => {
+        error: error => {
 
           this.isLoading.set(false);
 
-          this.errorKey.set(
-            'login.connectionError'
-          );
+          if (
+            error instanceof Error &&
+            error.message === 'UNSUPPORTED_ROLE'
+          ) {
+            this.errorKey.set('login.unsupportedRole');
+            return;
+          }
+
+          if (error instanceof HttpErrorResponse) {
+
+            if (error.status === 401 || error.status === 403) {
+              this.errorKey.set('login.invalidCredentials');
+              return;
+            }
+
+            if (error.status === 0) {
+              this.errorKey.set('login.connectionError');
+              return;
+            }
+
+          }
+
+          this.errorKey.set('login.serviceError');
 
         }
 
