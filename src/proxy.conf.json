@@ -1,0 +1,12 @@
+{
+  "/api/v1/owners/**": {
+    "target": "http://127.0.0.1:8081",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/api/v1/spaces/**": {
+    "target": "http://127.0.0.1:8081",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

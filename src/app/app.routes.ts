@@ -40,6 +40,13 @@ export const routes: Routes = [
     ],
 
     children: [
+      {
+        path: 'spaces',
+        loadComponent: () =>
+          import(
+            './contexts/space-management/presentation/pages/spaces-page/spaces-page'
+          ).then(m => m.SpacesPage)
+      },
 
       {
         path: 'dashboard',

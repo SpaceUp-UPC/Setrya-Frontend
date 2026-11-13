@@ -1,0 +1,159 @@
+<section class="spaces-page">
+
+  <header class="page-header">
+    <div>
+      <h1>{{ 'spaces.title' | translate }}</h1>
+      <p>{{ 'spaces.subtitle' | translate }}</p>
+    </div>
+
+    <button
+      type="button"
+      class="ds-button ds-button--primary"
+      (click)="toggleForm()">
+      {{ (showCreateForm() ? 'spaces.cancel' : 'spaces.new')
+        | translate }}
+    </button>
+  </header>
+
+  @if (showCreateForm()) {
+    <form
+      class="space-form ds-card"
+      [formGroup]="form"
+      (ngSubmit)="createSpace()">
+
+      <h2>{{ 'spaces.createTitle' | translate }}</h2>
+
+      <div class="form-grid">
+
+        <label class="form-field">
+          <span>{{ 'spaces.name' | translate }}</span>
+          <input
+            class="ds-input"
+            formControlName="name"
+            maxlength="160" />
+        </label>
+
+        <label class="form-field">
+          <span>{{ 'spaces.description' | translate }}</span>
+          <input
+            class="ds-input"
+            formControlName="description" />
+        </label>
+
+        <label class="form-field">
+          <span>{{ 'spaces.address' | translate }}</span>
+          <input class="ds-input" formControlName="address" />
+        </label>
+
+        <label class="form-field">
+          <span>{{ 'spaces.district' | translate }}</span>
+          <input class="ds-input" formControlName="district" />
+        </label>
+
+        <label class="form-field">
+          <span>{{ 'spaces.city' | translate }}</span>
+          <input class="ds-input" formControlName="city" />
+        </label>
+
+        <div class="dimensions-row">
+          <label class="form-field">
+            <span>{{ 'spaces.width' | translate }}</span>
+            <input
+              class="ds-input"
+              type="number"
+              min="0.01"
+              step="0.01"
+              formControlName="width" />
+          </label>
+
+          <label class="form-field">
+            <span>{{ 'spaces.length' | translate }}</span>
+            <input
+              class="ds-input"
+              type="number"
+              min="0.01"
+              step="0.01"
+              formControlName="length" />
+          </label>
+        </div>
+
+      </div>
+
+      @if (form.invalid && form.touched) {
+        <p class="form-feedback">
+          {{ 'spaces.invalidForm' | translate }}
+        </p>
+      }
+
+      <button
+        type="submit"
+        class="ds-button ds-button--accent"
+        [disabled]="isSaving()">
+
+        {{ (isSaving() ? 'spaces.creating' : 'spaces.create')
+          | translate }}
+      </button>
+    </form>
+  }
+
+  @if (errorKey(); as error) {
+    <div class="feedback error" role="alert">
+      {{ error | translate }}
+    </div>
+  }
+
+  @if (successKey(); as success) {
+    <div class="feedback success" role="status">
+      {{ success | translate }}
+    </div>
+  }
+
+  @if (isLoading()) {
+    <p>{{ 'spaces.loading' | translate }}</p>
+  } @else if (!errorKey() && spaces().length === 0) {
+    <div class="ds-card empty-state">
+      {{ 'spaces.empty' | translate }}
+    </div>
+  } @else {
+    <div class="spaces-grid">
+
+      @for (space of spaces(); track space.id) {
+        <article class="space-card ds-card">
+
+          <div class="space-heading">
+            <h2>{{ space.name }}</h2>
+
+            <span
+              class="ds-status"
+              [class.ds-status--success]="space.status === 'active'"
+              [class.ds-status--warning]="space.status === 'paused'"
+              [class.ds-status--info]="space.status === 'unavailable'">
+
+              {{ ('spaces.status.' + space.status) | translate }}
+            </span>
+          </div>
+
+          <p>{{ space.description }}</p>
+
+          <p class="space-location">
+            {{ space.location.address }},
+            {{ space.location.district }},
+            {{ space.location.city }}
+          </p>
+
+          <p class="space-dimensions">
+            {{ space.dimensions.width }} ×
+            {{ space.dimensions.length }} m
+          </p>
+
+          <p class="space-id">
+            ID: {{ space.id }}
+          </p>
+
+        </article>
+      }
+
+    </div>
+  }
+
+</section>

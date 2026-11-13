@@ -12,6 +12,7 @@
 
   "navigation": {
     "dashboard": "Panel principal",
+    "spaces": "Mis espacios",
     "temperature": "Temperatura",
     "security": "Seguridad",
     "power": "Protección eléctrica",
@@ -30,27 +31,21 @@
   "login": {
     "title": "Iniciar sesión",
     "subtitle": "Ingresa tus datos para acceder a tu cuenta.",
-
     "email": "Correo electrónico",
     "password": "Contraseña",
-
     "signIn": "Iniciar sesión",
     "signingIn": "Iniciando sesión...",
-
     "emailRequired": "El correo electrónico es obligatorio.",
     "invalidEmail": "Ingresa un correo electrónico válido.",
     "passwordRequired": "La contraseña es obligatoria.",
-
     "invalidCredentials": "Correo electrónico o contraseña incorrectos.",
     "connectionError": "No se pudo conectar con el servicio de autenticación.",
-
     "heroTag": "TU HOGAR, SIEMPRE CERCA",
     "heroTitle": "Tranquilidad y control en un mismo lugar.",
     "heroDescription": "Accede a Setrya para supervisar tus dispositivos, revisar alertas y cuidar lo que más importa, estés donde estés.",
     "heroBenefitSecurity": "Acceso protegido",
     "heroBenefitMonitoring": "Monitoreo continuo",
     "heroFooter": "Protección conectada",
-
     "serviceError": "El servicio de autenticación no pudo procesar la solicitud.",
     "unsupportedRole": "Este tipo de cuenta aún no dispone de acceso a la aplicación."
   },
@@ -59,6 +54,34 @@
     "pendingTitle": "Panel del implementador",
     "pendingDescription": "Has iniciado sesión correctamente. El panel de implementadores se encuentra en desarrollo.",
     "signedInAs": "Sesión iniciada como:"
+  },
+
+  "spaces": {
+    "title": "Mis espacios",
+    "subtitle": "Gestiona los ambientes asociados a tu cuenta.",
+    "new": "Nuevo espacio",
+    "cancel": "Cancelar",
+    "createTitle": "Registrar un espacio",
+    "name": "Nombre",
+    "description": "Descripción",
+    "address": "Dirección",
+    "district": "Distrito",
+    "city": "Ciudad",
+    "width": "Ancho (m)",
+    "length": "Largo (m)",
+    "create": "Crear espacio",
+    "creating": "Guardando...",
+    "invalidForm": "Completa los campos obligatorios con valores válidos.",
+    "loading": "Cargando espacios...",
+    "empty": "Todavía no tienes espacios registrados.",
+    "loadError": "No se pudieron cargar los espacios.",
+    "createError": "No se pudo crear el espacio.",
+    "created": "Espacio creado correctamente.",
+    "status": {
+      "active": "Activo",
+      "paused": "Pausado",
+      "unavailable": "No disponible"
+    }
   },
 
   "dashboard": {
@@ -85,30 +108,22 @@
   "temperature": {
     "title": "Monitoreo de temperatura",
     "subtitle": "Temperatura actual y estado del monitoreo térmico.",
-
     "deviceDetail": "Sensor térmico",
     "online": "En línea",
-
     "current": "Temperatura actual",
-
     "normal": "Normal",
     "warningThreshold": "Moderado",
     "criticalThreshold": "Crítico",
-
     "history": "Histórico de temperatura",
     "historySubtitle": "Mediciones recientes del sensor.",
-
     "recentEvents": "Eventos recientes",
-
     "deviceInformation": "Información del dispositivo",
     "deviceId": "ID del dispositivo",
     "location": "Ambiente",
     "battery": "Batería",
     "lastSignal": "Última señal",
     "statusLabel": "Estado",
-
     "recordedAt": "Registrado el",
-
     "noDevice": "No se encontró un sensor térmico.",
     "noReadings": "No se encontraron lecturas de temperatura.",
     "loading": "Cargando datos de temperatura..."
@@ -141,24 +156,18 @@
   "alerts": {
     "title": "Centro de alertas",
     "subtitle": "Alertas centralizadas generadas por los dispositivos Setrya.",
-
     "listTitle": "Alertas",
     "details": "Detalle de alerta",
-
     "source": "Origen",
     "severity": "Severidad",
     "statusLabel": "Estado",
     "createdAt": "Fecha de registro",
-
     "acknowledged": "Reconocida",
     "pending": "Pendiente",
-
     "noAlerts": "No hay alertas para este filtro.",
     "noSelection": "Selecciona una alerta para ver sus detalles.",
     "loading": "Cargando alertas...",
-
     "unknownSource": "Origen desconocido",
-
     "filters": {
       "all": "Todas",
       "critical": "Críticas",

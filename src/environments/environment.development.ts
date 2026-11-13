@@ -1,10 +1,12 @@
 export const environment = {
   production: false,
 
-  // API simulada, utilizada temporalmente
-  // por Dashboard y Monitoreo.
+  // Fake API para los módulos todavía no migrados.
   apiUrl: 'http://localhost:3000',
 
-  // Microservicio IAM ejecutado localmente.
-  iamApiUrl: 'http://localhost:8080'
+  // IAM local.
+  iamApiUrl: 'http://localhost:8080',
+
+  // Space Management: pasa por el proxy local de Angular.
+  spaceManagementApiUrl: '/api/v1'
 };
