@@ -1,11 +1,12 @@
 import { Observable } from 'rxjs';
 
-import { User } from '../models/user';
 import { LoginCredentials } from '../models/login-credentials';
+import { AuthenticatedSession } from '../models/authenticated-session';
 
 export abstract class AuthRepository {
 
   abstract login(
     credentials: LoginCredentials
-  ): Observable<User | null>;
+  ): Observable<AuthenticatedSession>;
+
 }

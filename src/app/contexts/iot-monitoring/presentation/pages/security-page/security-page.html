@@ -1,57 +1,197 @@
+
 <section class="security-page">
 
-  <header>
+  <header class="page-header">
 
-    <h1>
-      {{ 'security.title' | translate }}
-    </h1>
+    <div>
+      <h1>{{ 'security.title' | translate }}</h1>
 
-    <p>
-      {{ 'security.subtitle' | translate }}
-    </p>
+      <p>
+        {{ 'security.subtitle' | translate }}
+
+        @if (selectedSpace(); as space) {
+          · {{ space.name }}
+        }
+      </p>
+    </div>
+
+    <div class="page-actions">
+
+      @if (spaces().length > 0) {
+
+        <select
+          class="ds-input"
+          [value]="selectedSpaceId()"
+          [attr.aria-label]="'spaces.title' | translate"
+          (change)="changeSpace($event)">
+
+          @for (space of spaces(); track space.id) {
+            <option [value]="space.id">
+              {{ space.name }}
+            </option>
+          }
+
+        </select>
+
+      }
+
+      <button
+        type="button"
+        class="ds-button ds-button--secondary"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        {{ 'monitoringReal.refresh' | translate }}
+
+      </button>
+
+    </div>
 
   </header>
 
-  @if (events$ | async; as events) {
+  @if (loading()) {
 
-    @if (events.length > 0) {
+    <div class="empty-state ds-card">
+      <p>{{ 'security.loading' | translate }}</p>
+    </div>
+
+  } @else if (error()) {
+
+    <div class="empty-state ds-card" role="alert">
+
+      <p>{{ 'monitoringReal.loadError' | translate }}</p>
+
+      <button
+        type="button"
+        class="ds-button ds-button--secondary"
+        (click)="refresh()">
+
+        {{ 'monitoringReal.refresh' | translate }}
+
+      </button>
+
+    </div>
+
+  } @else if (spaces().length === 0) {
+
+    <div class="empty-state ds-card">
+
+      <p>{{ 'spaces.empty' | translate }}</p>
+
+      <a
+        routerLink="/spaces"
+        class="ds-button ds-button--primary">
+
+        {{ 'navigation.spaces' | translate }}
+
+      </a>
+
+    </div>
+
+  } @else {
+
+    <!-- SECURITY SUMMARY -->
+
+    <div class="security-summary">
+
+      <article class="summary-card ds-card">
+
+        <span>
+          {{ 'monitoringReal.activeAlerts' | translate }}
+        </span>
+
+        <strong>
+          {{ activeSecurityAlerts() }}
+        </strong>
+
+      </article>
+
+      <article class="summary-card ds-card">
+
+        <span>
+          {{ 'monitoringReal.alerts' | translate }}
+        </span>
+
+        <strong>
+          {{ securityAlerts().length }}
+        </strong>
+
+      </article>
+
+    </div>
+
+    <!-- SECURITY EVENTS -->
+
+    @if (securityAlerts().length > 0) {
 
       <div class="events">
 
-        @for (event of events; track event.id) {
+        @for (
+          alert of securityAlerts();
+          track alert.id
+        ) {
 
-          <article class="event-card">
+          <article class="event-card ds-card">
 
             <div class="event-header">
 
               <h2>
-                {{ event.location }}
-              </h2>
-
-              <span>
                 {{
-                  ('status.' + event.status)
+                  ('monitoringReal.metrics.' + alert.metricType)
                     | translate
                 }}
+              </h2>
+
+              <span
+                class="ds-status"
+                [class.ds-status--critical]="
+                  alert.severity === 'high' ||
+                  alert.severity === 'critical'
+                "
+                [class.ds-status--warning]="
+                  alert.severity === 'medium'
+                "
+                [class.ds-status--info]="
+                  alert.severity === 'low'
+                ">
+
+                {{
+                  ('monitoringReal.severity.' + alert.severity)
+                    | translate
+                }}
+
               </span>
 
             </div>
+
+            <p class="event-message">
+              {{ alert.message }}
+            </p>
 
             <dl>
 
               <div>
 
                 <dt>
-                  {{ 'security.personDetected' | translate }}
+                  {{ 'dashboard.device' | translate }}
+                </dt>
+
+                <dd>
+                  {{ getDeviceName(alert.deviceId) }}
+                </dd>
+
+              </div>
+
+              <div>
+
+                <dt>
+                  {{ 'alerts.statusLabel' | translate }}
                 </dt>
 
                 <dd>
                   {{
-                    (
-                      event.personDetected
-                        ? 'common.yes'
-                        : 'common.no'
-                    ) | translate
+                    ('monitoringReal.alertStatus.' + alert.status)
+                      | translate
                   }}
                 </dd>
 
@@ -60,34 +200,13 @@
               <div>
 
                 <dt>
-                  {{ 'security.personRecognized' | translate }}
+                  {{ 'alerts.severity' | translate }}
                 </dt>
 
                 <dd>
                   {{
-                    (
-                      event.personRecognized
-                        ? 'common.yes'
-                        : 'common.no'
-                    ) | translate
-                  }}
-                </dd>
-
-              </div>
-
-              <div>
-
-                <dt>
-                  {{ 'security.suspiciousSound' | translate }}
-                </dt>
-
-                <dd>
-                  {{
-                    (
-                      event.suspiciousSound
-                        ? 'common.yes'
-                        : 'common.no'
-                    ) | translate
+                    ('monitoringReal.severity.' + alert.severity)
+                      | translate
                   }}
                 </dd>
 
@@ -100,10 +219,58 @@
                 </dt>
 
                 <dd>
-                  {{ event.recordedAt | date:'medium' }}
+                  {{ alert.createdAt | date:'medium' }}
                 </dd>
 
               </div>
+
+              @if (alert.eventId) {
+
+                <div>
+
+                  <dt>
+                    {{ 'security.eventId' | translate }}
+                  </dt>
+
+                  <dd class="technical-value">
+                    {{ alert.eventId }}
+                  </dd>
+
+                </div>
+
+              }
+
+              @if (alert.reason) {
+
+                <div>
+
+                  <dt>
+                    {{ 'security.reason' | translate }}
+                  </dt>
+
+                  <dd>
+                    {{ alert.reason }}
+                  </dd>
+
+                </div>
+
+              }
+
+              @if (alert.evidenceRef) {
+
+                <div>
+
+                  <dt>
+                    {{ 'security.evidenceReference' | translate }}
+                  </dt>
+
+                  <dd class="technical-value">
+                    {{ alert.evidenceRef }}
+                  </dd>
+
+                </div>
+
+              }
 
             </dl>
 
@@ -115,18 +282,39 @@
 
     } @else {
 
-      <p>
-        {{ 'security.noEvents' | translate }}
-      </p>
+      <div class="empty-state ds-card">
+
+        <p>
+          {{ 'security.noEvents' | translate }}
+        </p>
+
+      </div>
 
     }
 
-  } @else {
+    <!-- RETURN TO MONITORING -->
 
-    <p>
-      {{ 'security.loading' | translate }}
-    </p>
+    @if (selectedSpace(); as space) {
+
+      <div class="bottom-actions">
+
+        <a
+          class="ds-button ds-button--secondary"
+          [routerLink]="[
+            '/spaces',
+            space.id,
+            'monitoring'
+          ]">
+
+          {{ 'monitoringReal.title' | translate }}
+
+        </a>
+
+      </div>
+
+    }
 
   }
 
 </section>
+

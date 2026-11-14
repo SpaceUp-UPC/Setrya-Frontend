@@ -1,5 +1,10 @@
+
 export const environment = {
   production: false,
 
-  apiUrl: 'http://localhost:3000'
+  iamApiUrl: 'http://localhost:8080',
+
+  spaceManagementApiUrl: '/api/v1',
+
+  iotMonitoringApiUrl: 'http://localhost:8082/api/v1'
 };

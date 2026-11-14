@@ -54,6 +54,19 @@
 
       </a>
 
+      <a
+        routerLink="/spaces"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        class="nav-link">
+
+        <span class="ds-dot" aria-hidden="true"></span>
+
+        <span>
+          {{ 'navigation.spaces' | translate }}
+        </span>
+
+      </a>
 
       <a
         routerLink="/monitoring/temperature"
@@ -91,22 +104,21 @@
       </a>
 
 
+      
       <a
-        routerLink="/monitoring/power"
+        routerLink="/monitoring/humidity"
         routerLinkActive="active"
         ariaCurrentWhenActive="page"
         class="nav-link">
 
-        <span
-          class="ds-dot"
-          aria-hidden="true">
-        </span>
+        <span class="ds-dot" aria-hidden="true"></span>
 
         <span>
-          {{ 'navigation.power' | translate }}
+          {{ 'navigation.humidity' | translate }}
         </span>
 
       </a>
+
 
 
       <a

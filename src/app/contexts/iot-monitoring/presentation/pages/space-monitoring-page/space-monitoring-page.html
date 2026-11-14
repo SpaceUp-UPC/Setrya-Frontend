@@ -1,0 +1,300 @@
+
+<section class="monitoring-page">
+
+  <header class="page-header">
+
+    <div>
+      <h1>{{ 'monitoringReal.title' | translate }}</h1>
+
+      @if (overview(); as data) {
+        <p>{{ data.space.name }}</p>
+        <p>
+          {{ data.space.location.district }},
+          {{ data.space.location.city }}
+        </p>
+      }
+    </div>
+
+    <div class="header-actions">
+
+      <a
+        routerLink="/spaces"
+        class="ds-button ds-button--secondary">
+        {{ 'monitoringReal.back' | translate }}
+      </a>
+
+      <button
+        type="button"
+        class="ds-button ds-button--primary"
+        [disabled]="loading()"
+        (click)="loadMonitoring()">
+        {{ 'monitoringReal.refresh' | translate }}
+      </button>
+
+    </div>
+
+  </header>
+
+  @if (loading()) {
+
+    <div class="ds-card empty-state">
+      {{ 'monitoringReal.loading' | translate }}
+    </div>
+
+  } @else if (error()) {
+
+    <div class="feedback-error" role="alert">
+      {{ 'monitoringReal.loadError' | translate }}
+    </div>
+
+  } @else if (overview(); as data) {
+
+    <section class="summary-grid">
+
+      <article class="ds-card summary-card">
+        <span>{{ 'monitoringReal.devices' | translate }}</span>
+        <strong>{{ data.devices.length }}</strong>
+        <p>
+          {{ activeDevices() }}
+          {{ 'monitoringReal.activeDevices' | translate }}
+        </p>
+      </article>
+
+      <article class="ds-card summary-card">
+        <span>{{ 'monitoringReal.temperature' | translate }}</span>
+
+        @if (latestTemperature(); as reading) {
+          <strong>
+            {{ reading.value | number:'1.0-2' }}
+            {{ reading.unit }}
+          </strong>
+        } @else {
+          <p>{{ 'monitoringReal.noData' | translate }}</p>
+        }
+      </article>
+
+      <article class="ds-card summary-card">
+        <span>{{ 'monitoringReal.humidity' | translate }}</span>
+
+        @if (latestHumidity(); as reading) {
+          <strong>
+            {{ reading.value | number:'1.0-2' }}
+            {{ reading.unit }}
+          </strong>
+        } @else {
+          <p>{{ 'monitoringReal.noData' | translate }}</p>
+        }
+      </article>
+
+      <article class="ds-card summary-card">
+        <span>{{ 'monitoringReal.activeAlerts' | translate }}</span>
+        <strong>{{ data.summary.activeAlerts }}</strong>
+
+        <span
+          class="ds-status"
+          [class.ds-status--success]="data.summary.status === 'normal'"
+          [class.ds-status--warning]="data.summary.status === 'attention'">
+
+          {{
+            ('monitoringReal.status.' + data.summary.status)
+              | translate
+          }}
+        </span>
+      </article>
+
+    </section>
+
+    <section class="monitoring-section ds-card">
+
+      <h2>{{ 'monitoringReal.devices' | translate }}</h2>
+
+      @if (data.devices.length === 0) {
+
+        <p>{{ 'monitoringReal.noDevices' | translate }}</p>
+
+      } @else {
+
+        <div class="device-grid">
+
+          @for (device of data.devices; track device.id) {
+
+            <article class="device-item">
+
+              <h3>{{ device.name }}</h3>
+
+              <p class="technical-id">{{ device.id }}</p>
+
+              <span
+                class="ds-status"
+                [class.ds-status--success]="device.active"
+                [class.ds-status--warning]="!device.active">
+
+                {{
+                  (device.active
+                    ? 'monitoringReal.deviceStatus.active'
+                    : 'monitoringReal.deviceStatus.inactive')
+                    | translate
+                }}
+
+              </span>
+
+            </article>
+
+          }
+
+        </div>
+
+      }
+
+    </section>
+
+    <section class="monitoring-section ds-card">
+
+      <h2>{{ 'monitoringReal.readings' | translate }}</h2>
+
+      @if (data.readings.length === 0) {
+
+        <p>{{ 'monitoringReal.noReadings' | translate }}</p>
+
+      } @else {
+
+        <div class="table-container">
+
+          <table class="data-table">
+
+            <thead>
+              <tr>
+                <th>{{ 'monitoringReal.metric' | translate }}</th>
+                <th>{{ 'monitoringReal.value' | translate }}</th>
+                <th>{{ 'monitoringReal.readingState' | translate }}</th>
+                <th>{{ 'monitoringReal.date' | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              @for (
+                reading of data.readings.slice(0, 10);
+                track reading.id
+              ) {
+
+                <tr>
+
+                  <td>
+                    {{
+                      ('monitoringReal.metrics.' + reading.metricType)
+                        | translate
+                    }}
+                  </td>
+
+                  <td>
+                    {{ reading.value | number:'1.0-2' }}
+                    {{ reading.unit }}
+                  </td>
+
+                  <td>
+                    <span
+                      class="ds-status"
+                      [class.ds-status--success]="reading.status === 'validated'"
+                      [class.ds-status--warning]="reading.status === 'out_of_range'"
+                      [class.ds-status--info]="reading.status === 'received'">
+
+                      {{
+                        ('monitoringReal.readingStatus.' + reading.status)
+                          | translate
+                      }}
+
+                    </span>
+                  </td>
+
+                  <td>
+                    {{ reading.receivedAt | date:'dd/MM/yyyy HH:mm' }}
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+    </section>
+
+    <section class="monitoring-section ds-card">
+
+      <h2>{{ 'monitoringReal.alerts' | translate }}</h2>
+
+      @if (data.alerts.length === 0) {
+
+        <p>{{ 'monitoringReal.noAlerts' | translate }}</p>
+
+      } @else {
+
+        <div class="alerts-list">
+
+          @for (
+            alert of data.alerts.slice(0, 10);
+            track alert.id
+          ) {
+
+            <article class="alert-item">
+
+              <div class="alert-heading">
+
+                <strong>
+                  {{
+                    ('monitoringReal.metrics.' + alert.metricType)
+                      | translate
+                  }}
+                </strong>
+
+                <span
+                  class="ds-status"
+                  [class.ds-status--critical]="alert.severity === 'high' || alert.severity === 'critical'"
+                  [class.ds-status--warning]="alert.severity === 'medium'"
+                  [class.ds-status--info]="alert.severity === 'low'">
+
+                  {{
+                    ('monitoringReal.severity.' + alert.severity)
+                      | translate
+                  }}
+
+                </span>
+
+              </div>
+
+              <p>{{ alert.message }}</p>
+
+              <div class="alert-footer">
+
+                <span>
+                  {{
+                    ('monitoringReal.alertStatus.' + alert.status)
+                      | translate
+                  }}
+                </span>
+
+                <time>
+                  {{ alert.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                </time>
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</section>

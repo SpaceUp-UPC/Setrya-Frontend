@@ -12,9 +12,10 @@
 
   "navigation": {
     "dashboard": "Dashboard",
+    "spaces": "My spaces",
     "temperature": "Temperature",
     "security": "Security",
-    "power": "Electrical Protection",
+    "humidity": "Humidity",
     "alerts": "Alerts"
   },
 
@@ -30,26 +31,115 @@
   "login": {
     "title": "Sign in",
     "subtitle": "Enter your information to access your account.",
-
     "email": "Email",
     "password": "Password",
-
     "signIn": "Sign in",
     "signingIn": "Signing in...",
-
     "emailRequired": "Email is required.",
     "invalidEmail": "Enter a valid email address.",
     "passwordRequired": "Password is required.",
-
     "invalidCredentials": "Invalid email or password.",
     "connectionError": "Unable to connect to the authentication service.",
-
     "heroTag": "YOUR HOME, ALWAYS CLOSE",
     "heroTitle": "Peace of mind and control in one place.",
     "heroDescription": "Access Setrya to monitor your devices, review alerts and stay connected with what matters most, wherever you are.",
     "heroBenefitSecurity": "Protected access",
     "heroBenefitMonitoring": "Continuous monitoring",
-    "heroFooter": "Connected protection"
+    "heroFooter": "Connected protection",
+    "serviceError": "The authentication service could not process the request.",
+    "unsupportedRole": "This account type does not have access to the application yet."
+  },
+
+  "implementer": {
+    "pendingTitle": "Implementer dashboard",
+    "pendingDescription": "You have signed in successfully. The implementer dashboard is under development.",
+    "signedInAs": "Signed in as:"
+  },
+
+  "spaces": {
+    "title": "My spaces",
+    "viewMonitoring": "View monitoring",
+    "subtitle": "Manage the spaces associated with your account.",
+    "new": "New space",
+    "cancel": "Cancel",
+    "createTitle": "Register a space",
+    "name": "Name",
+    "description": "Description",
+    "address": "Address",
+    "district": "District",
+    "city": "City",
+    "width": "Width (m)",
+    "length": "Length (m)",
+    "create": "Create space",
+    "creating": "Saving...",
+    "invalidForm": "Complete the required fields with valid values.",
+    "loading": "Loading spaces...",
+    "empty": "You haven't registered any spaces yet.",
+    "loadError": "Could not load spaces.",
+    "createError": "Could not create the space.",
+    "created": "Space created successfully.",
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "unavailable": "Unavailable"
+    }
+  },
+
+  "monitoringReal": {
+    "title": "Space monitoring",
+    "back": "Back to my spaces",
+    "refresh": "Refresh",
+    "loading": "Loading monitoring data...",
+    "loadError": "Could not load monitoring data for this space.",
+    "devices": "Registered devices",
+    "activeDevices": "active devices",
+    "temperature": "Latest temperature",
+    "humidity": "Latest humidity",
+    "activeAlerts": "Active alerts",
+    "readings": "Recent readings",
+    "alerts": "Space alerts",
+    "metric": "Metric",
+    "value": "Value",
+    "readingState": "Status",
+    "date": "Date",
+    "noData": "No readings",
+    "noDevices": "No registered devices.",
+    "noReadings": "No readings yet.",
+    "noAlerts": "No alerts recorded.",
+    "deviceStatus": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "status": {
+      "normal": "Normal",
+      "attention": "Attention required"
+    },
+    "readingStatus": {
+      "received": "Received",
+      "validated": "Validated",
+      "out_of_range": "Out of range"
+    },
+    "alertStatus": {
+      "created": "Created",
+      "sent": "Sent",
+      "acknowledged": "Acknowledged",
+      "closed": "Closed"
+    },
+    "severity": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "metrics": {
+      "temperature": "Temperature",
+      "humidity": "Humidity",
+      "voltage": "Voltage",
+      "sound": "Sound",
+      "intrusion": "Intrusion",
+      "escalation": "Escalation",
+      "device_error": "Device error"
+    }
   },
 
   "dashboard": {
@@ -62,7 +152,7 @@
     "alertBannerTitle": "Your home requires attention",
     "reviewAlerts": "Review alerts",
     "recentAlerts": "Recent alerts",
-    "registeredAlerts": "Registered alerts",
+    "registeredAlerts": "Alerts registered",
     "devicesByArea": "Devices by area",
     "quickActions": "Quick actions",
     "goToAlerts": "Go to alerts center",
@@ -76,44 +166,60 @@
   "temperature": {
     "title": "Temperature monitoring",
     "subtitle": "Current temperature and thermal monitoring status.",
-
     "deviceDetail": "Thermal sensor",
     "online": "Online",
-
     "current": "Current temperature",
-
     "normal": "Normal",
     "warningThreshold": "Warning",
     "criticalThreshold": "Critical",
-
     "history": "Temperature history",
     "historySubtitle": "Recent sensor measurements.",
-
     "recentEvents": "Recent events",
-
     "deviceInformation": "Device information",
     "deviceId": "Device ID",
     "location": "Location",
     "battery": "Battery",
     "lastSignal": "Last signal",
     "statusLabel": "Status",
-
     "recordedAt": "Recorded at",
-
     "noDevice": "No thermal sensor was found.",
     "noReadings": "No temperature readings found.",
     "loading": "Loading temperature data..."
   },
 
   "security": {
-    "title": "Security Monitoring",
-    "subtitle": "Acoustic and visual security events.",
+    "title": "Security monitoring",
+    "subtitle": "Recorded intrusion and escalation events.",
     "personDetected": "Person detected",
     "personRecognized": "Person recognized",
     "suspiciousSound": "Suspicious sound",
     "recordedAt": "Recorded at",
     "noEvents": "No security events found.",
-    "loading": "Loading security events..."
+    "loading": "Loading security events...",
+    "eventId": "Event ID",
+    "reason": "Reason",
+    "evidenceReference": "Evidence reference"
+  },
+
+  "humidity": {
+    "title": "Humidity monitoring",
+    "subtitle": "Current humidity and ambient conditions.",
+    "sensorDetail": "Humidity sensor",
+    "current": "Current humidity",
+    "backendRange": "Configured alert range",
+    "noThreshold": "No range is configured for this sensor.",
+    "history": "Humidity history",
+    "historySubtitle": "Recent sensor measurements.",
+    "recentReadings": "Recent readings",
+    "deviceInformation": "Device information",
+    "deviceId": "Device ID",
+    "location": "Space",
+    "statusLabel": "Device status",
+    "lastReading": "Last received reading",
+    "noDevice": "No humidity sensor was found.",
+    "noReadings": "No humidity readings available.",
+    "loading": "Loading humidity data...",
+    "actuatorNotice": "The physical humidifier status is not yet available in this interface."
   },
 
   "power": {
@@ -131,30 +237,32 @@
 
   "alerts": {
     "title": "Alerts center",
-    "subtitle": "Centralized alerts generated by Setrya devices.",
-
+    "subtitle": "Alerts recorded by Setrya devices.",
     "listTitle": "Alerts",
     "details": "Alert details",
-
-    "source": "Source",
+    "source": "Device",
     "severity": "Severity",
     "statusLabel": "Status",
     "createdAt": "Created at",
-
+    "acknowledgedAt": "Acknowledged at",
+    "closedAt": "Closed at",
+    "activeCount": "Unclosed alerts",
+    "acknowledgeAction": "Acknowledge alert",
+    "closeAction": "Close alert",
+    "confirmClose": "Do you want to close this alert? This action will change its status in the backend.",
+    "actionError": "Could not update the alert. Please try again.",
     "acknowledged": "Acknowledged",
     "pending": "Pending",
-
     "noAlerts": "No alerts found for this filter.",
     "noSelection": "Select an alert to view its details.",
     "loading": "Loading alerts...",
-
     "unknownSource": "Unknown source",
-
     "filters": {
       "all": "All",
       "critical": "Critical",
       "security": "Security",
-      "temperature": "Thermal",
+      "temperature": "Temperature",
+      "humidity": "Humidity",
       "power": "Electrical"
     }
   },

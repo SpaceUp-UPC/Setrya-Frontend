@@ -9,6 +9,8 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 
 import { User } from '../../domain/models/user';
+import { UserRole } from '../../domain/enums/user-role';
+import { AuthenticatedSession } from '../../domain/models/authenticated-session';
 
 @Injectable({
   providedIn: 'root'
@@ -20,56 +22,149 @@ export class AuthSessionService {
   private readonly isBrowser =
     isPlatformBrowser(this.platformId);
 
-  private readonly storageKey = 'setrya-user';
+  private readonly storageKey = 'setrya-auth-session';
 
-  private readonly currentUserSignal =
-    signal<User | null>(this.loadStoredUser());
+  private readonly sessionSignal =
+    signal<AuthenticatedSession | null>(
+      this.loadStoredSession()
+    );
 
-  readonly currentUser =
-    this.currentUserSignal.asReadonly();
+  readonly currentUser = computed<User | null>(
+    () => this.sessionSignal()?.user ?? null
+  );
 
-  readonly isAuthenticated =
-    computed(() => this.currentUserSignal() !== null);
+  readonly accessToken = computed<string | null>(
+    () => this.sessionSignal()?.token ?? null
+  );
 
-  setUser(user: User): void {
+  readonly isAuthenticated = computed(
+    () => this.sessionSignal() !== null
+  );
 
-    this.currentUserSignal.set(user);
+  setSession(session: AuthenticatedSession): boolean {
+
+    if (!this.isTokenActive(session.token)) {
+      return false;
+    }
+
+    this.sessionSignal.set(session);
 
     if (this.isBrowser) {
-      localStorage.setItem(
+      sessionStorage.setItem(
         this.storageKey,
-        JSON.stringify(user)
+        JSON.stringify(session)
       );
+
+      // Retirar la sesión simulada anterior.
+      localStorage.removeItem('setrya-user');
     }
+
+    return true;
+  }
+
+  hasValidSession(): boolean {
+
+    const session = this.sessionSignal();
+
+    if (!session) {
+      return false;
+    }
+
+    if (!this.isTokenActive(session.token)) {
+      this.clear();
+      return false;
+    }
+
+    return true;
   }
 
   clear(): void {
 
-    this.currentUserSignal.set(null);
+    this.sessionSignal.set(null);
 
     if (this.isBrowser) {
-      localStorage.removeItem(this.storageKey);
+      sessionStorage.removeItem(this.storageKey);
+      localStorage.removeItem('setrya-user');
     }
+
   }
 
-  private loadStoredUser(): User | null {
+  private loadStoredSession(): AuthenticatedSession | null {
 
     if (!this.isBrowser) {
       return null;
     }
 
-    const storedUser =
-      localStorage.getItem(this.storageKey);
+    const stored = sessionStorage.getItem(
+      this.storageKey
+    );
 
-    if (!storedUser) {
+    if (!stored) {
       return null;
     }
 
     try {
-      return JSON.parse(storedUser) as User;
+      const session = JSON.parse(
+        stored
+      ) as AuthenticatedSession;
+
+      const role = session?.user?.role;
+
+      const validRole =
+        role === UserRole.HOME_OWNER ||
+        role === UserRole.IMPLEMENTER;
+
+      if (
+        !validRole ||
+        typeof session?.user?.email !== 'string' ||
+        typeof session?.token !== 'string' ||
+        !this.isTokenActive(session.token)
+      ) {
+        sessionStorage.removeItem(this.storageKey);
+        return null;
+      }
+
+      return session;
+
     } catch {
-      localStorage.removeItem(this.storageKey);
+      sessionStorage.removeItem(this.storageKey);
       return null;
     }
+
   }
+
+  private isTokenActive(token: string): boolean {
+
+    try {
+
+      const payloadPart = token.split('.')[1];
+
+      if (!payloadPart) {
+        return false;
+      }
+
+      const base64 = payloadPart
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+
+      const padded = base64.padEnd(
+        Math.ceil(base64.length / 4) * 4,
+        '='
+      );
+
+      const payload = JSON.parse(
+        atob(padded)
+      );
+
+      return (
+        typeof payload.exp === 'number' &&
+        payload.exp * 1000 > Date.now()
+      );
+
+    } catch {
+      return false;
+    }
+
+  }
+
 }

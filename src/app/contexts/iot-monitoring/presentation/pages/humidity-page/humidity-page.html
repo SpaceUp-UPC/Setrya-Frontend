@@ -1,0 +1,402 @@
+
+<section class="humidity-page">
+
+  <header class="page-header">
+
+    <div>
+      <p class="eyebrow">
+        {{ 'humidity.sensorDetail' | translate }}
+      </p>
+
+      <h1>{{ 'humidity.title' | translate }}</h1>
+
+      @if (selectedSpace(); as space) {
+        <p>{{ space.name }}</p>
+      } @else {
+        <p>{{ 'humidity.subtitle' | translate }}</p>
+      }
+    </div>
+
+    <div class="page-actions">
+
+      @if (spaces().length > 0) {
+
+        <select
+          class="ds-input"
+          [value]="selectedSpaceId()"
+          [attr.aria-label]="'spaces.title' | translate"
+          (change)="changeSpace($event)">
+
+          @for (space of spaces(); track space.id) {
+            <option [value]="space.id">
+              {{ space.name }}
+            </option>
+          }
+
+        </select>
+
+      }
+
+      <button
+        type="button"
+        class="ds-button ds-button--secondary"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        {{ 'monitoringReal.refresh' | translate }}
+
+      </button>
+
+    </div>
+
+  </header>
+
+  @if (loading()) {
+
+    <div class="empty-state ds-card">
+      <p>{{ 'humidity.loading' | translate }}</p>
+    </div>
+
+  } @else if (error()) {
+
+    <div class="empty-state ds-card" role="alert">
+
+      <p>{{ 'monitoringReal.loadError' | translate }}</p>
+
+      <button
+        type="button"
+        class="ds-button ds-button--secondary"
+        (click)="refresh()">
+
+        {{ 'monitoringReal.refresh' | translate }}
+
+      </button>
+
+    </div>
+
+  } @else if (spaces().length === 0) {
+
+    <div class="empty-state ds-card">
+
+      <p>{{ 'spaces.empty' | translate }}</p>
+
+      <a
+        routerLink="/spaces"
+        class="ds-button ds-button--primary">
+
+        {{ 'navigation.spaces' | translate }}
+
+      </a>
+
+    </div>
+
+  } @else if (humidityDevices().length === 0) {
+
+    <div class="empty-state ds-card">
+      <p>{{ 'humidity.noDevice' | translate }}</p>
+    </div>
+
+  } @else if (selectedDevice(); as device) {
+
+    @if (humidityDevices().length > 1) {
+
+      <div class="sensor-selector ds-card">
+
+        <label for="humidity-device">
+          {{ 'humidity.sensorDetail' | translate }}
+        </label>
+
+        <select
+          id="humidity-device"
+          class="ds-input"
+          [value]="selectedDeviceId()"
+          (change)="changeDevice($event)">
+
+          @for (
+            sensor of humidityDevices();
+            track sensor.id
+          ) {
+            <option [value]="sensor.id">
+              {{ sensor.name }}
+            </option>
+          }
+
+        </select>
+
+      </div>
+
+    }
+
+    <!-- CURRENT HUMIDITY -->
+
+    <section class="humidity-hero ds-card">
+
+      <div class="humidity-current">
+
+        <span class="humidity-label">
+          {{ 'humidity.current' | translate }}
+        </span>
+
+        @if (currentReading(); as reading) {
+
+          <strong>
+            {{ reading.value | number:'1.1-1' }} %
+          </strong>
+
+          <span
+            class="ds-status"
+            [class.ds-status--success]="reading.status === 'validated'"
+            [class.ds-status--warning]="reading.status === 'out_of_range'"
+            [class.ds-status--info]="reading.status === 'received'">
+
+            {{
+              ('monitoringReal.readingStatus.' + reading.status)
+                | translate
+            }}
+
+          </span>
+
+        } @else {
+
+          <p>{{ 'humidity.noReadings' | translate }}</p>
+
+        }
+
+      </div>
+
+      @if (humidityThreshold(); as threshold) {
+
+        <div class="threshold-panel">
+
+          <span class="threshold-dot"></span>
+
+          <div>
+
+            <small>
+              {{ 'humidity.backendRange' | translate }}
+            </small>
+
+            <strong>
+              {{ threshold.minValue | number:'1.0-2' }}
+              –
+              {{ threshold.maxValue | number:'1.0-2' }}
+              {{ threshold.unit }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      } @else {
+
+        <p>{{ 'humidity.noThreshold' | translate }}</p>
+
+      }
+
+    </section>
+
+    <div class="humidity-layout">
+
+      <div class="humidity-main">
+
+        <!-- HISTORY -->
+
+        <section class="history-card ds-card">
+
+          <h2>{{ 'humidity.history' | translate }}</h2>
+
+          <p>{{ 'humidity.historySubtitle' | translate }}</p>
+
+          @if (humidityReadings().length > 0) {
+
+            <div class="chart">
+
+              @for (
+                reading of humidityReadings();
+                track reading.id
+              ) {
+
+                <div class="chart-column">
+
+                  <span class="chart-value">
+                    {{ reading.value | number:'1.0-1' }}%
+                  </span>
+
+                  <div class="chart-track">
+
+                    <div
+                      class="chart-bar"
+                      [style.height.%]="getBarHeight(reading.value)">
+                    </div>
+
+                  </div>
+
+                  <time>
+                    {{ reading.receivedAt | date:'HH:mm' }}
+                  </time>
+
+                </div>
+
+              }
+
+            </div>
+
+          } @else {
+
+            <p>{{ 'humidity.noReadings' | translate }}</p>
+
+          }
+
+        </section>
+
+        <!-- RECENT READINGS -->
+
+        <section class="recent-events ds-card">
+
+          <h2>
+            {{ 'humidity.recentReadings' | translate }}
+          </h2>
+
+          @if (recentReadings().length > 0) {
+
+            <div class="events-list">
+
+              @for (
+                reading of recentReadings();
+                track reading.id
+              ) {
+
+                <div class="event-row">
+
+                  <div>
+
+                    <strong>
+                      {{ reading.value | number:'1.1-1' }} %
+                    </strong>
+
+                    <span>
+                      {{
+                        ('monitoringReal.readingStatus.' + reading.status)
+                          | translate
+                      }}
+                    </span>
+
+                  </div>
+
+                  <time>
+                    {{ reading.receivedAt | date:'short' }}
+                  </time>
+
+                </div>
+
+              }
+
+            </div>
+
+          } @else {
+
+            <p>{{ 'humidity.noReadings' | translate }}</p>
+
+          }
+
+        </section>
+
+      </div>
+
+      <!-- DEVICE INFORMATION -->
+
+      <aside class="device-info ds-card">
+
+        <h2>
+          {{ 'humidity.deviceInformation' | translate }}
+        </h2>
+
+        <dl>
+
+          <div>
+
+            <dt>{{ 'humidity.sensorDetail' | translate }}</dt>
+
+            <dd>{{ device.name }}</dd>
+
+          </div>
+
+          <div>
+
+            <dt>{{ 'humidity.deviceId' | translate }}</dt>
+
+            <dd class="technical-id">
+              {{ device.id }}
+            </dd>
+
+          </div>
+
+          <div>
+
+            <dt>{{ 'humidity.location' | translate }}</dt>
+
+            <dd>{{ selectedSpace()?.name }}</dd>
+
+          </div>
+
+          <div>
+
+            <dt>{{ 'humidity.statusLabel' | translate }}</dt>
+
+            <dd>
+              {{
+                (device.active
+                  ? 'monitoringReal.deviceStatus.active'
+                  : 'monitoringReal.deviceStatus.inactive')
+                  | translate
+              }}
+            </dd>
+
+          </div>
+
+          <div>
+
+            <dt>{{ 'humidity.lastReading' | translate }}</dt>
+
+            <dd>
+
+              @if (currentReading(); as reading) {
+                {{ reading.receivedAt | date:'medium' }}
+              } @else {
+                -
+              }
+
+            </dd>
+
+          </div>
+
+        </dl>
+
+        <p class="actuator-note">
+          {{ 'humidity.actuatorNotice' | translate }}
+        </p>
+
+        @if (selectedSpace(); as space) {
+
+          <a
+            class="ds-button ds-button--secondary monitoring-link"
+            [routerLink]="[
+              '/spaces',
+              space.id,
+              'monitoring'
+            ]">
+
+            {{ 'monitoringReal.title' | translate }}
+
+          </a>
+
+        }
+
+      </aside>
+
+    </div>
+
+  }
+
+</section>
+

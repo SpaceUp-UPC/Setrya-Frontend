@@ -12,9 +12,10 @@
 
   "navigation": {
     "dashboard": "Panel principal",
+    "spaces": "Mis espacios",
     "temperature": "Temperatura",
     "security": "Seguridad",
-    "power": "Protección eléctrica",
+    "humidity": "Humedad",
     "alerts": "Alertas"
   },
 
@@ -30,26 +31,115 @@
   "login": {
     "title": "Iniciar sesión",
     "subtitle": "Ingresa tus datos para acceder a tu cuenta.",
-
     "email": "Correo electrónico",
     "password": "Contraseña",
-
     "signIn": "Iniciar sesión",
     "signingIn": "Iniciando sesión...",
-
     "emailRequired": "El correo electrónico es obligatorio.",
     "invalidEmail": "Ingresa un correo electrónico válido.",
     "passwordRequired": "La contraseña es obligatoria.",
-
     "invalidCredentials": "Correo electrónico o contraseña incorrectos.",
     "connectionError": "No se pudo conectar con el servicio de autenticación.",
-
     "heroTag": "TU HOGAR, SIEMPRE CERCA",
     "heroTitle": "Tranquilidad y control en un mismo lugar.",
     "heroDescription": "Accede a Setrya para supervisar tus dispositivos, revisar alertas y cuidar lo que más importa, estés donde estés.",
     "heroBenefitSecurity": "Acceso protegido",
     "heroBenefitMonitoring": "Monitoreo continuo",
-    "heroFooter": "Protección conectada"
+    "heroFooter": "Protección conectada",
+    "serviceError": "El servicio de autenticación no pudo procesar la solicitud.",
+    "unsupportedRole": "Este tipo de cuenta aún no dispone de acceso a la aplicación."
+  },
+
+  "implementer": {
+    "pendingTitle": "Panel del implementador",
+    "pendingDescription": "Has iniciado sesión correctamente. El panel de implementadores se encuentra en desarrollo.",
+    "signedInAs": "Sesión iniciada como:"
+  },
+
+  "spaces": {
+    "title": "Mis espacios",
+    "viewMonitoring": "Ver monitoreo",
+    "subtitle": "Gestiona los ambientes asociados a tu cuenta.",
+    "new": "Nuevo espacio",
+    "cancel": "Cancelar",
+    "createTitle": "Registrar un espacio",
+    "name": "Nombre",
+    "description": "Descripción",
+    "address": "Dirección",
+    "district": "Distrito",
+    "city": "Ciudad",
+    "width": "Ancho (m)",
+    "length": "Largo (m)",
+    "create": "Crear espacio",
+    "creating": "Guardando...",
+    "invalidForm": "Completa los campos obligatorios con valores válidos.",
+    "loading": "Cargando espacios...",
+    "empty": "Todavía no tienes espacios registrados.",
+    "loadError": "No se pudieron cargar los espacios.",
+    "createError": "No se pudo crear el espacio.",
+    "created": "Espacio creado correctamente.",
+    "status": {
+      "active": "Activo",
+      "paused": "Pausado",
+      "unavailable": "No disponible"
+    }
+  },
+
+  "monitoringReal": {
+    "title": "Monitoreo del espacio",
+    "back": "Volver a mis espacios",
+    "refresh": "Actualizar",
+    "loading": "Cargando monitoreo...",
+    "loadError": "No se pudo cargar el monitoreo de este espacio.",
+    "devices": "Dispositivos registrados",
+    "activeDevices": "dispositivos activos",
+    "temperature": "Última temperatura",
+    "humidity": "Última humedad",
+    "activeAlerts": "Alertas activas",
+    "readings": "Lecturas recientes",
+    "alerts": "Alertas del espacio",
+    "metric": "Métrica",
+    "value": "Valor",
+    "readingState": "Estado",
+    "date": "Fecha",
+    "noData": "Sin lecturas",
+    "noDevices": "No hay dispositivos registrados.",
+    "noReadings": "Todavía no hay lecturas.",
+    "noAlerts": "No hay alertas registradas.",
+    "deviceStatus": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "status": {
+      "normal": "Normal",
+      "attention": "Requiere atención"
+    },
+    "readingStatus": {
+      "received": "Recibida",
+      "validated": "Validada",
+      "out_of_range": "Fuera de rango"
+    },
+    "alertStatus": {
+      "created": "Creada",
+      "sent": "Enviada",
+      "acknowledged": "Reconocida",
+      "closed": "Cerrada"
+    },
+    "severity": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta",
+      "critical": "Crítica"
+    },
+    "metrics": {
+      "temperature": "Temperatura",
+      "humidity": "Humedad",
+      "voltage": "Voltaje",
+      "sound": "Sonido",
+      "intrusion": "Intrusión",
+      "escalation": "Escalamiento",
+      "device_error": "Error de dispositivo"
+    }
   },
 
   "dashboard": {
@@ -76,30 +166,22 @@
   "temperature": {
     "title": "Monitoreo de temperatura",
     "subtitle": "Temperatura actual y estado del monitoreo térmico.",
-
     "deviceDetail": "Sensor térmico",
     "online": "En línea",
-
     "current": "Temperatura actual",
-
     "normal": "Normal",
     "warningThreshold": "Moderado",
     "criticalThreshold": "Crítico",
-
     "history": "Histórico de temperatura",
     "historySubtitle": "Mediciones recientes del sensor.",
-
     "recentEvents": "Eventos recientes",
-
     "deviceInformation": "Información del dispositivo",
     "deviceId": "ID del dispositivo",
     "location": "Ambiente",
     "battery": "Batería",
     "lastSignal": "Última señal",
     "statusLabel": "Estado",
-
     "recordedAt": "Registrado el",
-
     "noDevice": "No se encontró un sensor térmico.",
     "noReadings": "No se encontraron lecturas de temperatura.",
     "loading": "Cargando datos de temperatura..."
@@ -107,13 +189,37 @@
 
   "security": {
     "title": "Monitoreo de seguridad",
-    "subtitle": "Eventos de seguridad acústicos y visuales.",
+    "subtitle": "Eventos de intrusión y escalamiento registrados.",
     "personDetected": "Persona detectada",
     "personRecognized": "Persona reconocida",
     "suspiciousSound": "Sonido sospechoso",
     "recordedAt": "Registrado el",
     "noEvents": "No se encontraron eventos de seguridad.",
-    "loading": "Cargando eventos de seguridad..."
+    "loading": "Cargando eventos de seguridad...",
+    "eventId": "ID del evento",
+    "reason": "Motivo",
+    "evidenceReference": "Referencia de evidencia"
+  },
+
+  "humidity": {
+    "title": "Monitoreo de humedad",
+    "subtitle": "Humedad actual y estado del ambiente.",
+    "sensorDetail": "Sensor de humedad",
+    "current": "Humedad actual",
+    "backendRange": "Rango de alerta configurado",
+    "noThreshold": "No hay un rango configurado para este sensor.",
+    "history": "Historial de humedad",
+    "historySubtitle": "Mediciones recientes del sensor.",
+    "recentReadings": "Lecturas recientes",
+    "deviceInformation": "Información del dispositivo",
+    "deviceId": "ID del dispositivo",
+    "location": "Ambiente",
+    "statusLabel": "Estado del dispositivo",
+    "lastReading": "Última lectura recibida",
+    "noDevice": "No se encontró un sensor de humedad.",
+    "noReadings": "No hay lecturas de humedad disponibles.",
+    "loading": "Cargando datos de humedad...",
+    "actuatorNotice": "El estado físico del humidificador todavía no está disponible en esta interfaz."
   },
 
   "power": {
@@ -131,30 +237,32 @@
 
   "alerts": {
     "title": "Centro de alertas",
-    "subtitle": "Alertas centralizadas generadas por los dispositivos Setrya.",
-
+    "subtitle": "Alertas registradas por los dispositivos Setrya.",
     "listTitle": "Alertas",
     "details": "Detalle de alerta",
-
-    "source": "Origen",
+    "source": "Dispositivo",
     "severity": "Severidad",
     "statusLabel": "Estado",
     "createdAt": "Fecha de registro",
-
+    "acknowledgedAt": "Reconocida el",
+    "closedAt": "Cerrada el",
+    "activeCount": "Alertas sin cerrar",
+    "acknowledgeAction": "Reconocer alerta",
+    "closeAction": "Cerrar alerta",
+    "confirmClose": "¿Deseas cerrar esta alerta? Esta acción cambiará su estado en el backend.",
+    "actionError": "No se pudo actualizar la alerta. Inténtalo nuevamente.",
     "acknowledged": "Reconocida",
     "pending": "Pendiente",
-
     "noAlerts": "No hay alertas para este filtro.",
     "noSelection": "Selecciona una alerta para ver sus detalles.",
     "loading": "Cargando alertas...",
-
     "unknownSource": "Origen desconocido",
-
     "filters": {
       "all": "Todas",
       "critical": "Críticas",
       "security": "Seguridad",
-      "temperature": "Térmicas",
+      "temperature": "Temperatura",
+      "humidity": "Humedad",
       "power": "Eléctricas"
     }
   },

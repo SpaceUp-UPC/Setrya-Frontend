@@ -3,67 +3,84 @@ import { HttpClient } from '@angular/common/http';
 
 import {
   map,
-  Observable
+  Observable,
+  throwError
 } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
 
 import { AuthRepository } from '../../domain/repositories/auth.repository';
-
 import { LoginCredentials } from '../../domain/models/login-credentials';
-import { User } from '../../domain/models/user';
+import { AuthenticatedSession } from '../../domain/models/authenticated-session';
+import { UserRole } from '../../domain/enums/user-role';
 
-
-interface FakeApiUser extends User {
-  password: string;
+interface IamSignInResponse {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  token: string;
 }
 
-
 @Injectable()
-export class HttpAuthRepository
-  extends AuthRepository {
+export class HttpAuthRepository extends AuthRepository {
 
-  private readonly http =
-    inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
-  private readonly apiUrl =
-    environment.apiUrl;
-
+  private readonly iamApiUrl =
+    environment.iamApiUrl.replace(/\/+$/, '');
 
   login(
     credentials: LoginCredentials
-  ): Observable<User | null> {
+  ): Observable<AuthenticatedSession> {
+
+    if (!this.iamApiUrl) {
+      return throwError(
+        () => new Error('IAM_NOT_CONFIGURED')
+      );
+    }
+
+    const body = {
+      username: credentials.email.trim(),
+      password: credentials.password
+    };
 
     return this.http
-      .get<FakeApiUser[]>(
-        `${this.apiUrl}/users`,
-        {
-          params: {
-            email: credentials.email,
-            password: credentials.password
-          }
-        }
+      .post<IamSignInResponse>(
+        `${this.iamApiUrl}/api/v1/authentication/sign-in`,
+        body
       )
       .pipe(
+        map(response => {
 
-        map(users => {
+          if (
+            !Number.isInteger(response?.id) ||
+            typeof response.name !== 'string' ||
+            typeof response.email !== 'string' ||
+            typeof response.token !== 'string' ||
+            !response.token
+          ) {
+            throw new Error('INVALID_IAM_RESPONSE');
+          }
 
-          const user =
-            users[0];
-
-          if (!user) {
-            return null;
+          if (
+            response.role !== UserRole.HOME_OWNER &&
+            response.role !== UserRole.IMPLEMENTER
+          ) {
+            throw new Error('UNSUPPORTED_ROLE');
           }
 
           return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role
+            user: {
+              id: response.id,
+              name: response.name,
+              email: response.email,
+              role: response.role
+            },
+            token: response.token
           };
 
         })
-
       );
 
   }

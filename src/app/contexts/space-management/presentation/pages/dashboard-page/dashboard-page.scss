@@ -536,3 +536,23 @@
   }
 
 }
+
+.home-selector select {
+  min-width: 180px;
+  max-width: 260px;
+}
+
+.alert-content .ds-status {
+  display: inline-flex;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state .ds-button {
+  display: inline-flex;
+  margin-top: 1rem;
+  text-decoration: none;
+}
+
+.quick-action-buttons button {
+  cursor: pointer;
+}
