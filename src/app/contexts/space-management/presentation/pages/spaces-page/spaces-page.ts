@@ -18,9 +18,11 @@ import {
   CreateSpaceRequest
 } from '../../../domain/models/space';
 
+import { RouterLink } from '@angular/router';
+
 @Component({
   selector: 'app-spaces-page',
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [ReactiveFormsModule, TranslatePipe, RouterLink],
   templateUrl: './spaces-page.html',
   styleUrl: './spaces-page.scss'
 })

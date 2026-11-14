@@ -1,39 +1,88 @@
+
 <section class="dashboard-page">
 
-  @if (overview$ | async; as overview) {
+  <header class="page-header">
 
-    <!-- =====================================================
-         HEADER
-         ===================================================== -->
+    <div>
+      <h1>{{ 'dashboard.title' | translate }}</h1>
 
-    <header class="page-header">
+      <p>
+        {{ 'dashboard.subtitle' | translate }}
 
-      <div>
+        @if (data(); as overview) {
+          · {{ overview.space.name }}
+        }
+      </p>
+    </div>
 
-        <h1>
-          {{ 'dashboard.title' | translate }}
-        </h1>
+    <div class="home-selector">
 
-        <p>
-          {{ 'dashboard.subtitle' | translate }}
-          ·
-          {{ overview.home.name }}
-        </p>
+      @if (spaces().length > 0) {
 
-      </div>
+        <select
+          class="ds-input"
+          [value]="selectedSpaceId()"
+          [attr.aria-label]="'spaces.title' | translate"
+          (change)="selectSpace($event)">
 
-      <div class="home-selector">
-        {{ overview.home.name }}
-      </div>
+          @for (space of spaces(); track space.id) {
+            <option [value]="space.id">
+              {{ space.name }}
+            </option>
+          }
 
-    </header>
+        </select>
 
+      }
 
-    <!-- =====================================================
-         ALERT CTA
-         ===================================================== -->
+    </div>
 
-    @if (overview.alerts.length > 0) {
+  </header>
+
+  @if (loading()) {
+
+    <div class="loading-state ds-card">
+      <p>{{ 'dashboard.loading' | translate }}</p>
+    </div>
+
+  } @else if (error()) {
+
+    <div class="empty-state ds-card" role="alert">
+
+      <p>{{ 'monitoringReal.loadError' | translate }}</p>
+
+      <button
+        type="button"
+        class="ds-button ds-button--secondary"
+        (click)="refresh()">
+
+        {{ 'monitoringReal.refresh' | translate }}
+
+      </button>
+
+    </div>
+
+  } @else if (spaces().length === 0) {
+
+    <div class="empty-state ds-card">
+
+      <p>{{ 'spaces.empty' | translate }}</p>
+
+      <a
+        routerLink="/spaces"
+        class="ds-button ds-button--primary">
+
+        {{ 'navigation.spaces' | translate }}
+
+      </a>
+
+    </div>
+
+  } @else if (data(); as overview) {
+
+    <!-- ALERT BANNER -->
+
+    @if (overview.summary.activeAlerts > 0) {
 
       <section class="alert-banner">
 
@@ -42,23 +91,22 @@
           <span class="alert-banner-dot"></span>
 
           <div>
-
             <strong>
               {{ 'dashboard.alertBannerTitle' | translate }}
             </strong>
 
             <p>
-              {{ overview.alerts.length }}
+              {{ overview.summary.activeAlerts }}
               {{ 'dashboard.activeAlerts' | translate }}
             </p>
-
           </div>
 
         </div>
 
         <a
+          class="ds-button ds-button--accent"
           routerLink="/alerts"
-          class="ds-button ds-button--accent">
+          [queryParams]="{ spaceId: overview.space.id }">
 
           {{ 'dashboard.reviewAlerts' | translate }}
 
@@ -68,14 +116,9 @@
 
     }
 
-
-    <!-- =====================================================
-         SUMMARY
-         ===================================================== -->
+    <!-- SUMMARY -->
 
     <section class="summary-grid">
-
-      <!-- Devices -->
 
       <article class="summary-card">
 
@@ -93,9 +136,6 @@
 
       </article>
 
-
-      <!-- Alerts -->
-
       <article class="summary-card">
 
         <span class="summary-label">
@@ -103,17 +143,26 @@
         </span>
 
         <strong class="summary-value">
-          {{ overview.alerts.length }}
+          {{ overview.summary.activeAlerts }}
         </strong>
 
-        <span class="summary-description">
-          {{ 'dashboard.registeredAlerts' | translate }}
+        <span
+          class="ds-status"
+          [class.ds-status--success]="
+            overview.summary.status === 'normal'
+          "
+          [class.ds-status--warning]="
+            overview.summary.status === 'attention'
+          ">
+
+          {{
+            ('monitoringReal.status.' + overview.summary.status)
+              | translate
+          }}
+
         </span>
 
       </article>
-
-
-      <!-- Temperature -->
 
       <article class="summary-card">
 
@@ -121,22 +170,21 @@
           {{ 'navigation.temperature' | translate }}
         </span>
 
-        @if (overview.temperature) {
+        @if (latestTemperature(); as reading) {
 
           <strong class="summary-value">
-            {{ overview.temperature.temperature }} °C
+            {{ reading.value | number:'1.0-2' }}
+            {{ reading.unit }}
           </strong>
 
           <span
-            [class]="getStatusClass(
-              overview.temperature.status
-            )">
+            class="ds-status"
+            [class.ds-status--success]="reading.status === 'validated'"
+            [class.ds-status--warning]="reading.status === 'out_of_range'">
 
             {{
-              (
-                'status.' +
-                overview.temperature.status
-              ) | translate
+              ('monitoringReal.readingStatus.' + reading.status)
+                | translate
             }}
 
           </span>
@@ -151,30 +199,29 @@
 
       </article>
 
-
-      <!-- Electrical -->
-
       <article class="summary-card">
 
         <span class="summary-label">
-          {{ 'navigation.power' | translate }}
+          {{ 'monitoringReal.humidity' | translate }}
         </span>
 
-        @if (overview.power) {
+        @if (latestHumidity(); as reading) {
 
-          <strong class="summary-value status-value">
-
-            {{
-              (
-                'status.' +
-                overview.power.status
-              ) | translate
-            }}
-
+          <strong class="summary-value">
+            {{ reading.value | number:'1.0-2' }}
+            {{ reading.unit }}
           </strong>
 
-          <span class="summary-description">
-            {{ overview.power.voltage }} V
+          <span
+            class="ds-status"
+            [class.ds-status--success]="reading.status === 'validated'"
+            [class.ds-status--warning]="reading.status === 'out_of_range'">
+
+            {{
+              ('monitoringReal.readingStatus.' + reading.status)
+                | translate
+            }}
+
           </span>
 
         } @else {
@@ -189,33 +236,21 @@
 
     </section>
 
-
-    <!-- =====================================================
-         MAIN CONTENT
-         ===================================================== -->
+    <!-- MAIN CONTENT -->
 
     <div class="dashboard-content">
 
-
-      <!-- ===================================================
-           LEFT COLUMN
-           =================================================== -->
-
       <div class="dashboard-main">
 
-
-        <!-- Devices -->
+        <!-- DEVICES -->
 
         <section class="devices-section">
 
           <div class="section-header">
-
             <h2>
               {{ 'dashboard.devicesByArea' | translate }}
             </h2>
-
           </div>
-
 
           @if (overview.devices.length > 0) {
 
@@ -224,11 +259,15 @@
               @for (
                 device of overview.devices;
                 track device.id
-                ) {
+              ) {
 
                 <a
                   class="device-card"
-                  [routerLink]="getDeviceRoute(device)">
+                  [routerLink]="[
+                    '/spaces',
+                    overview.space.id,
+                    'monitoring'
+                  ]">
 
                   <div class="device-icon">
                     <span></span>
@@ -236,33 +275,31 @@
 
                   <div class="device-content">
 
-                    <h3>
-                      {{ device.name }}
-                    </h3>
+                    <h3>{{ device.name }}</h3>
 
                     <p>
-                      {{ device.location }}
+                      {{ overview.space.name }}
                     </p>
 
                     <div class="device-footer">
 
                       <span>
                         {{
-                          getDeviceTypeLabel(device)
+                          getDeviceMetricLabel(device)
                             | translate
                         }}
                       </span>
 
                       <span
-                        [class]="getStatusClass(
-                          device.status
-                        )">
+                        class="ds-status"
+                        [class.ds-status--success]="device.active"
+                        [class.ds-status--warning]="!device.active">
 
                         {{
-                          (
-                            'status.' +
-                            device.status
-                          ) | translate
+                          (device.active
+                            ? 'monitoringReal.deviceStatus.active'
+                            : 'monitoringReal.deviceStatus.inactive')
+                            | translate
                         }}
 
                       </span>
@@ -280,51 +317,49 @@
           } @else {
 
             <div class="empty-state">
-
-              <p>
-                {{ 'dashboard.noDevices' | translate }}
-              </p>
-
+              <p>{{ 'dashboard.noDevices' | translate }}</p>
             </div>
 
           }
 
         </section>
 
-
-        <!-- Quick actions -->
+        <!-- QUICK ACTIONS -->
 
         <section class="quick-actions ds-card">
 
-          <h2>
-            {{ 'dashboard.quickActions' | translate }}
-          </h2>
+          <h2>{{ 'dashboard.quickActions' | translate }}</h2>
 
           <div class="quick-action-buttons">
 
             <a
-              routerLink="/alerts"
+              routerLink="/spaces"
               class="ds-button ds-button--primary">
 
-              {{ 'navigation.alerts' | translate }}
+              {{ 'navigation.spaces' | translate }}
 
             </a>
 
             <a
-              routerLink="/monitoring/temperature"
-              class="ds-button ds-button--secondary">
+              class="ds-button ds-button--secondary"
+              [routerLink]="[
+                '/spaces',
+                overview.space.id,
+                'monitoring'
+              ]">
 
-              {{ 'navigation.temperature' | translate }}
-
-            </a>
-
-            <a
-              routerLink="/monitoring/security"
-              class="ds-button ds-button--secondary">
-
-              {{ 'navigation.security' | translate }}
+              {{ 'spaces.viewMonitoring' | translate }}
 
             </a>
+
+            <button
+              type="button"
+              class="ds-button ds-button--secondary"
+              (click)="refresh()">
+
+              {{ 'monitoringReal.refresh' | translate }}
+
+            </button>
 
           </div>
 
@@ -332,10 +367,7 @@
 
       </div>
 
-
-      <!-- ===================================================
-           ALERTS COLUMN
-           =================================================== -->
+      <!-- RECENT ALERTS -->
 
       <aside class="recent-alerts ds-card">
 
@@ -347,23 +379,23 @@
 
         </div>
 
-
-        @if (overview.alerts.length > 0) {
+        @if (recentAlerts().length > 0) {
 
           <div class="alerts-list">
 
             @for (
-              alert of overview.alerts;
+              alert of recentAlerts();
               track alert.id
-              ) {
+            ) {
 
               <article
                 class="recent-alert"
                 [class.alert-critical]="
-                  alert.severity === 'CRITICAL'
+                  alert.severity === 'high' ||
+                  alert.severity === 'critical'
                 "
                 [class.alert-warning]="
-                  alert.severity === 'WARNING'
+                  alert.severity === 'medium'
                 ">
 
                 <div class="alert-indicator"></div>
@@ -371,18 +403,23 @@
                 <div class="alert-content">
 
                   <strong>
-                    {{ alert.title }}
+                    {{
+                      ('monitoringReal.metrics.' + alert.metricType)
+                        | translate
+                    }}
                   </strong>
 
-                  <p>
-                    {{ alert.description }}
-                  </p>
+                  <p>{{ alert.message }}</p>
+
+                  <span class="ds-status">
+                    {{
+                      ('monitoringReal.alertStatus.' + alert.status)
+                        | translate
+                    }}
+                  </span>
 
                   <time>
-                    {{
-                      alert.createdAt
-                        | date:'short'
-                    }}
+                    {{ alert.createdAt | date:'short' }}
                   </time>
 
                 </div>
@@ -393,14 +430,10 @@
 
           </div>
 
-
           <a
+            class="ds-button ds-button--secondary alerts-button"
             routerLink="/alerts"
-            class="
-              ds-button
-              ds-button--secondary
-              alerts-button
-            ">
+            [queryParams]="{ spaceId: overview.space.id }">
 
             {{ 'dashboard.goToAlerts' | translate }}
 
@@ -419,16 +452,6 @@
         }
 
       </aside>
-
-    </div>
-
-  } @else {
-
-    <div class="loading-state">
-
-      <p>
-        {{ 'dashboard.loading' | translate }}
-      </p>
 
     </div>
 

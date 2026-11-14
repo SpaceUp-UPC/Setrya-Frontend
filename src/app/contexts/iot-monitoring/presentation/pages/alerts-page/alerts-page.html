@@ -1,246 +1,242 @@
-<section class="alerts-page">
 
-  <!-- =====================================================
-       HEADER
-       ===================================================== -->
+<section class="alerts-page">
 
   <header class="page-header">
 
     <div>
-
-      <h1>
-        {{ 'alerts.title' | translate }}
-      </h1>
+      <h1>{{ 'alerts.title' | translate }}</h1>
 
       <p>
         {{ 'alerts.subtitle' | translate }}
+
+        @if (selectedSpace(); as space) {
+          · {{ space.name }}
+        }
       </p>
+    </div>
+
+    <div class="header-actions">
+
+      @if (spaces().length > 0) {
+
+        <select
+          class="ds-input"
+          [value]="selectedSpaceId()"
+          [attr.aria-label]="'spaces.title' | translate"
+          (change)="changeSpace($event)">
+
+          @for (space of spaces(); track space.id) {
+            <option [value]="space.id">
+              {{ space.name }}
+            </option>
+          }
+
+        </select>
+
+      }
+
+      <button
+        type="button"
+        class="ds-button ds-button--secondary"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        {{ 'monitoringReal.refresh' | translate }}
+
+      </button>
 
     </div>
 
   </header>
 
+  @if (loading()) {
 
-  @if (alerts$ | async; as alerts) {
+    <div class="loading-state ds-card">
+      <p>{{ 'alerts.loading' | translate }}</p>
+    </div>
 
-    <!-- ===================================================
-         FILTERS
-         =================================================== -->
+  } @else if (error()) {
 
-    <div
-      class="alert-filters"
-      role="group"
-      [attr.aria-label]="
-    'accessibility.alertFilters'
-      | translate
-  ">
+    <div class="empty-state ds-card" role="alert">
+
+      <p>{{ 'monitoringReal.loadError' | translate }}</p>
 
       <button
         type="button"
-        class="filter-button"
-        [class.active]="
-          selectedFilter() === 'ALL'
-        "
-        [attr.aria-pressed]="
-          selectedFilter() === 'ALL'
-        "
-        (click)="setFilter('ALL', alerts)">
+        class="ds-button ds-button--secondary"
+        (click)="refresh()">
 
-        {{ 'alerts.filters.all' | translate }}
-
-      </button>
-
-
-      <button
-        type="button"
-        class="filter-button"
-        [class.active]="
-          selectedFilter() === 'CRITICAL'
-        "
-        [attr.aria-pressed]="
-          selectedFilter() === 'CRITICAL'
-        "
-        (click)="setFilter('CRITICAL', alerts)">
-
-        {{ 'alerts.filters.critical' | translate }}
-
-      </button>
-
-
-      <button
-        type="button"
-        class="filter-button"
-        [class.active]="
-          selectedFilter() === 'SECURITY'
-        "
-        [attr.aria-pressed]="
-          selectedFilter() === 'SECURITY'
-        "
-        (click)="setFilter('SECURITY', alerts)">
-
-        {{ 'alerts.filters.security' | translate }}
-
-      </button>
-
-
-      <button
-        type="button"
-        class="filter-button"
-        [class.active]="
-          selectedFilter() === 'TEMPERATURE'
-        "
-        [attr.aria-pressed]="
-          selectedFilter() === 'TEMPERATURE'
-        "
-        (click)="setFilter('TEMPERATURE', alerts)">
-
-        {{ 'alerts.filters.temperature' | translate }}
-
-      </button>
-
-
-      <button
-        type="button"
-        class="filter-button"
-        [class.active]="
-          selectedFilter() === 'POWER'
-        "
-        [attr.aria-pressed]="
-          selectedFilter() === 'POWER'
-        "
-        (click)="setFilter('POWER', alerts)">
-
-        {{ 'alerts.filters.power' | translate }}
+        {{ 'monitoringReal.refresh' | translate }}
 
       </button>
 
     </div>
 
+  } @else if (spaces().length === 0) {
 
-    @let filteredAlerts =
-      filterAlerts(alerts);
+    <div class="empty-state ds-card">
 
+      <p>{{ 'spaces.empty' | translate }}</p>
 
-    <!-- ===================================================
-         CONTENT
-         =================================================== -->
+      <a
+        routerLink="/spaces"
+        class="ds-button ds-button--primary">
+
+        {{ 'navigation.spaces' | translate }}
+
+      </a>
+
+    </div>
+
+  } @else {
+
+    <div class="alerts-overview ds-card">
+
+      <span>
+        {{ 'alerts.activeCount' | translate }}
+      </span>
+
+      <strong>{{ activeAlertsCount() }}</strong>
+
+    </div>
+
+    <!-- TYPE FILTERS -->
+
+    <div
+      class="alert-filters"
+      role="group"
+      [attr.aria-label]="'accessibility.alertFilters' | translate">
+
+      @for (filter of typeFilters; track filter.value) {
+
+        <button
+          type="button"
+          class="filter-button"
+          [class.active]="selectedFilter() === filter.value"
+          [attr.aria-pressed]="selectedFilter() === filter.value"
+          (click)="setFilter(filter.value)">
+
+          {{ filter.labelKey | translate }}
+
+        </button>
+
+      }
+
+    </div>
+
+    <!-- STATUS FILTER -->
+
+    <div class="status-filter">
+
+      <label for="alert-status-filter">
+        {{ 'alerts.statusLabel' | translate }}
+      </label>
+
+      <select
+        id="alert-status-filter"
+        class="ds-input"
+        [value]="selectedStatus()"
+        (change)="changeStatus($event)">
+
+        <option value="all">
+          {{ 'alerts.filters.all' | translate }}
+        </option>
+
+        <option value="created">
+          {{ 'monitoringReal.alertStatus.created' | translate }}
+        </option>
+
+        <option value="sent">
+          {{ 'monitoringReal.alertStatus.sent' | translate }}
+        </option>
+
+        <option value="acknowledged">
+          {{ 'monitoringReal.alertStatus.acknowledged' | translate }}
+        </option>
+
+        <option value="closed">
+          {{ 'monitoringReal.alertStatus.closed' | translate }}
+        </option>
+
+      </select>
+
+    </div>
+
+    <!-- ALERTS LAYOUT -->
 
     <div class="alerts-layout">
-
-
-      <!-- =================================================
-           ALERT LIST
-           ================================================= -->
 
       <section class="alerts-list-section">
 
         <div class="section-header">
 
-          <h2>
-            {{ 'alerts.listTitle' | translate }}
-          </h2>
+          <h2>{{ 'alerts.listTitle' | translate }}</h2>
 
           <span class="alerts-count">
-            {{ filteredAlerts.length }}
+            {{ filteredAlerts().length }}
           </span>
 
         </div>
 
-
-        @if (filteredAlerts.length > 0) {
+        @if (filteredAlerts().length > 0) {
 
           <div class="alerts-list">
 
             @for (
-              alert of filteredAlerts;
+              alert of filteredAlerts();
               track alert.id
-              ) {
+            ) {
 
               <button
                 type="button"
                 class="alert-card"
-                [class.selected]="
-                  selectedAlert()?.id === alert.id
-                "
-                [attr.aria-pressed]="
-                  selectedAlert()?.id === alert.id
-                "
+                [class.selected]="selectedAlert()?.id === alert.id"
+                [attr.aria-pressed]="selectedAlert()?.id === alert.id"
                 (click)="selectAlert(alert)">
-
-
-                <!-- Header -->
 
                 <div class="alert-card-header">
 
                   <span
-                    [class]="
-                      getSeverityClass(
-                        alert.severity
-                      )
-                    ">
+                    [class]="getSeverityClass(alert.severity)">
 
                     {{
-                      (
-                        'status.' +
-                        alert.severity
-                      ) | translate
+                      ('monitoringReal.severity.' + alert.severity)
+                        | translate
                     }}
 
                   </span>
 
-
                   <time>
-                    {{
-                      alert.createdAt
-                        | date:'short'
-                    }}
+                    {{ alert.createdAt | date:'short' }}
                   </time>
 
                 </div>
 
-
-                <!-- Body -->
-
                 <div class="alert-card-body">
 
                   <h3>
-                    {{ alert.title }}
+                    {{
+                      ('monitoringReal.metrics.' + alert.metricType)
+                        | translate
+                    }}
                   </h3>
 
-                  <p>
-                    {{ alert.description }}
-                  </p>
+                  <p>{{ alert.message }}</p>
 
                 </div>
-
-
-                <!-- Footer -->
 
                 <div class="alert-card-footer">
 
                   <span class="alert-source">
-
                     <span class="ds-dot"></span>
-
-                    {{
-                      getSourceTranslationKey(
-                        alert.source
-                      ) | translate
-                    }}
-
+                    {{ getDeviceName(alert.deviceId) }}
                   </span>
 
-
                   <span class="alert-state">
-
                     {{
-                      (
-                        alert.acknowledged
-                          ? 'alerts.acknowledged'
-                          : 'alerts.pending'
-                      ) | translate
+                      ('monitoringReal.alertStatus.' + alert.status)
+                        | translate
                     }}
-
                   </span>
 
                 </div>
@@ -254,21 +250,14 @@
         } @else {
 
           <div class="empty-state ds-card">
-
-            <p>
-              {{ 'alerts.noAlerts' | translate }}
-            </p>
-
+            <p>{{ 'alerts.noAlerts' | translate }}</p>
           </div>
 
         }
 
       </section>
 
-
-      <!-- =================================================
-           ALERT DETAIL
-           ================================================= -->
+      <!-- SELECTED ALERT DETAIL -->
 
       <aside class="alert-detail ds-card">
 
@@ -283,142 +272,204 @@
               </span>
 
               <h2>
-                {{ alert.title }}
+                {{
+                  ('monitoringReal.metrics.' + alert.metricType)
+                    | translate
+                }}
               </h2>
 
             </div>
 
-
             <span
-              [class]="
-                getSeverityClass(
-                  alert.severity
-                )
-              ">
+              [class]="getSeverityClass(alert.severity)">
 
               {{
-                (
-                  'status.' +
-                  alert.severity
-                ) | translate
+                ('monitoringReal.severity.' + alert.severity)
+                  | translate
               }}
 
             </span>
 
           </div>
 
-
           <p class="detail-description">
-            {{ alert.description }}
+            {{ alert.message }}
           </p>
-
 
           <dl class="detail-grid">
 
-            <!-- Source -->
+            <div>
+
+              <dt>{{ 'alerts.source' | translate }}</dt>
+
+              <dd>{{ getDeviceName(alert.deviceId) }}</dd>
+
+            </div>
 
             <div>
 
-              <dt>
-                {{ 'alerts.source' | translate }}
-              </dt>
+              <dt>{{ 'alerts.severity' | translate }}</dt>
 
               <dd>
                 {{
-                  getSourceTranslationKey(
-                    alert.source
-                  ) | translate
+                  ('monitoringReal.severity.' + alert.severity)
+                    | translate
                 }}
               </dd>
 
             </div>
 
-
-            <!-- Severity -->
-
             <div>
 
-              <dt>
-                {{ 'alerts.severity' | translate }}
-              </dt>
+              <dt>{{ 'alerts.statusLabel' | translate }}</dt>
 
               <dd>
                 {{
-                  (
-                    'status.' +
-                    alert.severity
-                  ) | translate
+                  ('monitoringReal.alertStatus.' + alert.status)
+                    | translate
                 }}
               </dd>
 
             </div>
 
-
-            <!-- Status -->
-
             <div>
 
-              <dt>
-                {{ 'alerts.statusLabel' | translate }}
-              </dt>
+              <dt>{{ 'alerts.createdAt' | translate }}</dt>
 
               <dd>
-
-                {{
-                  (
-                    alert.acknowledged
-                      ? 'alerts.acknowledged'
-                      : 'alerts.pending'
-                  ) | translate
-                }}
-
+                {{ alert.createdAt | date:'medium' }}
               </dd>
 
             </div>
 
+            @if (alert.acknowledgedAt) {
 
-            <!-- Date -->
+              <div>
 
-            <div>
+                <dt>
+                  {{ 'alerts.acknowledgedAt' | translate }}
+                </dt>
 
-              <dt>
-                {{ 'alerts.createdAt' | translate }}
-              </dt>
+                <dd>
+                  {{ alert.acknowledgedAt | date:'medium' }}
+                </dd>
 
-              <dd>
-                {{
-                  alert.createdAt
-                    | date:'medium'
-                }}
-              </dd>
+              </div>
 
-            </div>
+            }
+
+            @if (alert.closedAt) {
+
+              <div>
+
+                <dt>{{ 'alerts.closedAt' | translate }}</dt>
+
+                <dd>
+                  {{ alert.closedAt | date:'medium' }}
+                </dd>
+
+              </div>
+
+            }
+
+            @if (alert.eventId) {
+
+              <div>
+
+                <dt>{{ 'security.eventId' | translate }}</dt>
+
+                <dd class="technical-value">
+                  {{ alert.eventId }}
+                </dd>
+
+              </div>
+
+            }
+
+            @if (alert.reason) {
+
+              <div>
+
+                <dt>{{ 'security.reason' | translate }}</dt>
+
+                <dd>{{ alert.reason }}</dd>
+
+              </div>
+
+            }
+
+            @if (alert.evidenceRef) {
+
+              <div>
+
+                <dt>
+                  {{ 'security.evidenceReference' | translate }}
+                </dt>
+
+                <dd class="technical-value">
+                  {{ alert.evidenceRef }}
+                </dd>
+
+              </div>
+
+            }
 
           </dl>
+
+          <!-- ALERT ACTIONS -->
+
+          @if (alert.status !== 'closed') {
+
+            <div class="alert-actions">
+
+              @if (
+                alert.status === 'created' ||
+                alert.status === 'sent'
+              ) {
+
+                <button
+                  type="button"
+                  class="ds-button ds-button--primary"
+                  [disabled]="busyAlertId() !== null"
+                  (click)="acknowledgeAlert(alert)">
+
+                  {{ 'alerts.acknowledgeAction' | translate }}
+
+                </button>
+
+              }
+
+              <button
+                type="button"
+                class="ds-button ds-button--secondary"
+                [disabled]="busyAlertId() !== null"
+                (click)="closeAlert(alert)">
+
+                {{ 'alerts.closeAction' | translate }}
+
+              </button>
+
+            </div>
+
+          }
+
+          @if (actionError()) {
+
+            <p class="action-error" role="alert">
+              {{ 'alerts.actionError' | translate }}
+            </p>
+
+          }
 
         } @else {
 
           <div class="empty-detail">
-
-            <p>
-              {{ 'alerts.noSelection' | translate }}
-            </p>
-
+            <p>{{ 'alerts.noSelection' | translate }}</p>
           </div>
 
         }
 
       </aside>
-
-    </div>
-
-  } @else {
-
-    <div class="loading-state">
-
-      <p>
-        {{ 'alerts.loading' | translate }}
-      </p>
 
     </div>
 

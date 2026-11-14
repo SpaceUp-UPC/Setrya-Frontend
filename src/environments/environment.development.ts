@@ -1,12 +1,10 @@
+
 export const environment = {
   production: false,
 
-  // Fake API para los módulos todavía no migrados.
-  apiUrl: 'http://localhost:3000',
-
-  // IAM local.
   iamApiUrl: 'http://localhost:8080',
 
-  // Space Management: pasa por el proxy local de Angular.
-  spaceManagementApiUrl: '/api/v1'
+  spaceManagementApiUrl: '/api/v1',
+
+  iotMonitoringApiUrl: 'http://localhost:8082/api/v1'
 };

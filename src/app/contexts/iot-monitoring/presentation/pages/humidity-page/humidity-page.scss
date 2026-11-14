@@ -1,0 +1,303 @@
+
+.humidity-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.page-header h1 {
+  margin-bottom: 0.35rem;
+}
+
+.page-header p {
+  margin: 0;
+}
+
+.eyebrow {
+  margin-bottom: 0.4rem !important;
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.page-actions,
+.sensor-selector {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.page-actions select,
+.sensor-selector select {
+  min-width: 180px;
+  max-width: 260px;
+}
+
+.sensor-selector {
+  margin-bottom: 1.5rem;
+}
+
+/* Current humidity */
+
+.humidity-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.humidity-current {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.humidity-label {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+}
+
+.humidity-current > strong {
+  color: var(--color-primary);
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.threshold-panel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.threshold-panel div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.threshold-panel small {
+  color: var(--color-text-secondary);
+}
+
+.threshold-panel strong {
+  color: var(--color-text);
+}
+
+.threshold-dot {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-success-text);
+}
+
+/* Main layout */
+
+.humidity-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
+  gap: 1.25rem;
+}
+
+.humidity-main {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.history-card h2,
+.recent-events h2,
+.device-info h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+}
+
+.history-card p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* Chart */
+
+.chart {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  height: 260px;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.chart-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 55px;
+  height: 100%;
+}
+
+.chart-value {
+  margin-bottom: 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+}
+
+.chart-track {
+  display: flex;
+  align-items: flex-end;
+  flex: 1;
+  width: 100%;
+  max-width: 42px;
+  background: var(--color-hover);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.chart-bar {
+  width: 100%;
+  background: var(--color-accent);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition: height 200ms ease;
+}
+
+.chart-column time {
+  margin-top: 0.65rem;
+  color: var(--color-text-secondary);
+  font-size: 0.7rem;
+}
+
+/* Recent readings */
+
+.events-list {
+  display: grid;
+}
+
+.event-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.event-row:last-child {
+  border-bottom: 0;
+}
+
+.event-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.event-row span,
+.event-row time {
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+}
+
+/* Device information */
+
+.device-info {
+  position: sticky;
+  top: 2rem;
+}
+
+.device-info dl {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+}
+
+.device-info dl > div {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.device-info dt {
+  margin-bottom: 0.25rem;
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+}
+
+.device-info dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-weight: 500;
+}
+
+.technical-id {
+  font-size: 0.85rem;
+}
+
+.actuator-note {
+  margin-top: 1.25rem;
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+}
+
+.monitoring-link {
+  display: inline-flex;
+  margin-top: 1rem;
+  text-decoration: none;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Responsive */
+
+@media (max-width: 1000px) {
+  .humidity-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .device-info {
+    position: static;
+  }
+}
+
+@media (max-width: 700px) {
+  .page-header {
+    flex-direction: column;
+  }
+
+  .humidity-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .page-actions {
+    width: 100%;
+  }
+
+  .page-actions select {
+    flex: 1;
+    max-width: none;
+  }
+
+  .humidity-current > strong {
+    font-size: 2.5rem;
+  }
+}

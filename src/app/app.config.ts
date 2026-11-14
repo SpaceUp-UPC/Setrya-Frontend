@@ -1,14 +1,20 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners
+} from '@angular/core';
+
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
+
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
-import { IotMonitoringRepository } from './contexts/iot-monitoring/domain/repositories/iot-monitoring.repository';
-import { HttpIotMonitoringRepository } from './contexts/iot-monitoring/infrastructure/repositories/http-iot-monitoring.repository';
-import { SpaceManagementRepository } from './contexts/space-management/domain/repositories/space-management.repository';
-import { HttpSpaceManagementRepository } from './contexts/space-management/infrastructure/repositories/http-space-management.repository';
-import { AuthRepository } from './contexts/identity-access/domain/repositories/auth.repository';
-import { HttpAuthRepository } from './contexts/identity-access/infrastructure/repositories/http-auth.repository';
+
+import { AuthRepository } from
+  './contexts/identity-access/domain/repositories/auth.repository';
+
+import { HttpAuthRepository } from
+  './contexts/identity-access/infrastructure/repositories/http-auth.repository';
+
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -19,18 +25,12 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
 
     {
-      provide: IotMonitoringRepository,
-      useClass: HttpIotMonitoringRepository
-    },
-    {
-      provide: SpaceManagementRepository,
-      useClass: HttpSpaceManagementRepository
-    },
-    {
       provide: AuthRepository,
       useClass: HttpAuthRepository
     },
+
     provideClientHydration(),
+
     provideTranslateService({
       loader: provideTranslateHttpLoader({
         prefix: './i18n/',
@@ -39,5 +39,5 @@ export const appConfig: ApplicationConfig = {
       fallbackLang: 'en-US',
       lang: 'en-US'
     })
-  ],
+  ]
 };

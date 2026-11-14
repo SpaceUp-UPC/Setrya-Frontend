@@ -49,6 +49,14 @@ export const routes: Routes = [
       },
 
       {
+        path: 'spaces/:spaceId/monitoring',
+        loadComponent: () =>
+          import(
+            './contexts/iot-monitoring/presentation/pages/space-monitoring-page/space-monitoring-page'
+          ).then(m => m.SpaceMonitoringPage)
+      },
+
+      {
         path: 'dashboard',
         loadComponent: () =>
           import(
@@ -72,13 +80,15 @@ export const routes: Routes = [
           ).then(m => m.SecurityPage)
       },
 
+      
       {
-        path: 'monitoring/power',
+        path: 'monitoring/humidity',
         loadComponent: () =>
           import(
-            './contexts/iot-monitoring/presentation/pages/power-page/power-page'
-          ).then(m => m.PowerPage)
+            './contexts/iot-monitoring/presentation/pages/humidity-page/humidity-page'
+          ).then(m => m.HumidityPage)
       },
+
 
       {
         path: 'alerts',
